@@ -1,4 +1,4 @@
-<!DOCTYPE html><!-- v19-redeploy -->
+<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -101,8 +101,9 @@
   .brandrow { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
   .wordmark { font-size: 22px; font-weight: 800; color: var(--accent); letter-spacing: -0.3px; }
   .wordmark span { color: var(--black); font-weight: 700; font-size: 13px; margin-left: 8px; }
-  .wordmark .wordmark-logo { display: inline-flex; align-items: center; color: var(--accent); font-weight: 800; font-size: 22px; margin-left: 0; letter-spacing: -0.3px; }
+  .wordmark .wordmark-logo { display: inline-flex; align-items: center; color: var(--accent); font-weight: 800; font-size: 22px; margin-left: 0; letter-spacing: -0.3px; transition: opacity .16s var(--ease); }
   .wordmark .wordmark-logo img { display: block; height: 20px; }
+  .wordmark .wordmark-logo.theme-fade-out { opacity: 0; }
   .internal-badge {
     font-size: 11px; font-weight: 700; color: var(--gray-400); background: var(--gray-100);
     padding: 5px 11px; border-radius: 20px; white-space: nowrap; align-self: center;
@@ -481,12 +482,22 @@
   .hero.hero-collapsed {
     max-height: 0; padding-top: 0; padding-bottom: 0; opacity: 0; pointer-events: none;
   }
+  /* brand-switch crossfade: JS paints the incoming brand's gradient into this overlay at
+     opacity 0, then fades it in — a real crossfade between the old/new banner colors instead
+     of the instant, jarring snap a plain background swap would produce. */
+  .hero::after {
+    content: ''; position: absolute; inset: 0; opacity: 0; background: var(--hero-bg-next, transparent);
+    transition: opacity .45s var(--ease); pointer-events: none; z-index: 0;
+  }
+  .hero.hero-swap::after { opacity: 1; }
   .hero-inner {
+    position: relative; z-index: 1;
     max-width: 1080px; margin: 0 auto; display: flex; align-items: center; gap: 36px; flex-wrap: wrap;
   }
   @keyframes heroIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
   .hero-text { flex: 1 1 380px; color: #fff; animation: heroIn .8s var(--ease) both; }
-  .hero-gallery { animation: heroIn .8s var(--ease) .12s both; }
+  .hero-gallery { animation: heroIn .8s var(--ease) .12s both; transition: opacity .16s var(--ease); }
+  .hero-gallery.theme-fade-out { opacity: 0; }
   .hero-eyebrow {
     display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.16);
     color: #fff; font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 20px;
@@ -844,7 +855,10 @@ const HERO_THEMES = {
     accentSoft: '#eaecf9'
   },
   KTZ: {
-    wordmark: '<img src="' + KTZ_LOGO_URI + '" alt="키즈토즈" loading="lazy">',
+    // taller than the other wordmark logos on purpose — the KTZ mark's own letterforms sit
+    // lighter/thinner than "Cell Fusion C" or the 수이스킨 logo, so matching the shared 20px
+    // height made it read as noticeably smaller even though the box height was identical.
+    wordmark: '<img src="' + KTZ_LOGO_URI + '" alt="키즈토즈" loading="lazy" style="height:32px">',
     heroBg: 'linear-gradient(135deg, #AA5761 0%, #ED7987 50%, #f5aab2 100%)',
     // KTZ has no storefront of its own — its line is sold through the Cell Fusion C shop,
     // so these are real KTZ product photos pulled from there (cellfusionc.co.kr 키즈토즈 line)
@@ -889,26 +903,63 @@ function activeHeroBrand() {
   return 'CFC';
 }
 
+let heroThemeSwapTimer = null;
 function updateHeaderTheme() {
   const theme = HERO_THEMES[activeHeroBrand()] || HERO_THEMES.CFC;
   const wm = document.getElementById('wordmarkLogo');
   const hero = document.getElementById('heroSection');
   const gallery = document.getElementById('heroGallery');
-  if (wm) wm.innerHTML = theme.wordmark;
-  if (hero) hero.style.background = theme.heroBg;
-  if (gallery) gallery.innerHTML = theme.gallery;
-  const root = document.documentElement.style;
-  root.setProperty('--accent', theme.accent);
-  root.setProperty('--accent-dark', theme.accentDark);
-  root.setProperty('--accent-soft', theme.accentSoft);
-
   const copy = VIEW_HERO_COPY[currentView] || VIEW_HERO_COPY.faq;
   const eyebrowEl = document.getElementById('heroEyebrow');
   const titleEl = document.getElementById('heroTitle');
   const subEl = document.getElementById('heroSubText');
-  if (eyebrowEl) eyebrowEl.textContent = copy.eyebrow;
-  if (titleEl) titleEl.innerHTML = copy.title;
-  if (subEl) subEl.textContent = copy.sub;
+
+  const applyText = function() {
+    if (eyebrowEl) eyebrowEl.textContent = copy.eyebrow;
+    if (titleEl) titleEl.innerHTML = copy.title;
+    if (subEl) subEl.textContent = copy.sub;
+  };
+  const applyVisuals = function() {
+    if (wm) wm.innerHTML = theme.wordmark;
+    if (hero) hero.style.background = theme.heroBg;
+    if (gallery) gallery.innerHTML = theme.gallery;
+    const root = document.documentElement.style;
+    root.setProperty('--accent', theme.accent);
+    root.setProperty('--accent-dark', theme.accentDark);
+    root.setProperty('--accent-soft', theme.accentSoft);
+  };
+
+  const themeKey = activeHeroBrand();
+  const prevKey = hero ? hero.dataset.themeKey : null;
+  const isFirstRun = !prevKey;
+  if (hero) hero.dataset.themeKey = themeKey;
+  applyText();
+
+  // Brand didn't actually change (e.g. re-render within the same brand, or first paint) —
+  // apply instantly, no need to crossfade into itself.
+  if (isFirstRun || prevKey === themeKey || !hero) {
+    applyVisuals();
+    return;
+  }
+
+  // Genuine brand switch: crossfade the hero gradient via a ::after overlay (painted with the
+  // incoming brand's gradient, faded from 0→1 opacity — a real crossfade rather than an instant
+  // background snap, since browsers don't reliably interpolate between two gradients), and
+  // briefly fade the wordmark logo + gallery photos out/in so they don't just pop-swap mid-frame.
+  clearTimeout(heroThemeSwapTimer);
+  hero.style.setProperty('--hero-bg-next', theme.heroBg);
+  if (wm) wm.classList.add('theme-fade-out');
+  if (gallery) gallery.classList.add('theme-fade-out');
+  requestAnimationFrame(function() {
+    hero.classList.add('hero-swap');
+  });
+  heroThemeSwapTimer = setTimeout(function() {
+    applyVisuals();
+    hero.classList.remove('hero-swap');
+    hero.style.removeProperty('--hero-bg-next');
+    if (wm) wm.classList.remove('theme-fade-out');
+    if (gallery) gallery.classList.remove('theme-fade-out');
+  }, 420);
 }
 
 let currentView = 'faq';
@@ -1477,13 +1528,24 @@ function renderSubtabs() {
     if (faqMode === 'brand') {
       Array.from(row.querySelectorAll('.brandtab')).forEach(function(btn) {
         btn.addEventListener('click', function() {
-          currentBrand = btn.getAttribute('data-brand');
+          const newBrand = btn.getAttribute('data-brand');
+          if (newBrand === currentBrand) return;
+          currentBrand = newBrand;
           currentCategory = '';
           currentQuery = '';
           openCategories = new Set();
           allExpanded = false;
           document.getElementById('searchInput').value = '';
-          renderSubtabs();
+          // Toggle .active in place instead of a full renderSubtabs() rebuild — the brand icon
+          // row's structure never actually changes when switching brands (same icons, same
+          // order), only which one is active. Rebuilding respawned every avatar as a brand-new
+          // DOM node already born in its final state, which skipped their border/shadow/lift
+          // CSS transitions entirely — that instant snap was the "뚝뚝 끊어지는" jank. Keeping
+          // the same nodes and just flipping the class lets those transitions actually play.
+          Array.from(row.querySelectorAll('.brandtab')).forEach(function(b) {
+            b.classList.toggle('active', b === btn);
+          });
+          updateHeaderTheme();
           renderCatSelect();
           renderContent();
         });
@@ -2370,6 +2432,19 @@ if (heroStatEls.length) {
     heroStatEls.forEach(function(el) { animateCount(el); });
   }
 }
+
+// The hero's one-time page-load entrance animation (heroIn) uses fill-mode "both", which
+// permanently pins opacity at its end-state (1) even after the animation finishes — a running
+// *or fill-persisted* CSS animation always wins over a CSS transition targeting the same
+// property, no matter how specific the transition's selector is. That silently broke the brand
+// -switch crossfade's opacity fade on these two elements (it kept computing to opacity:1
+// throughout). Once the entrance animation completes, hand the property back to ordinary
+// transitions by clearing it.
+Array.from(document.querySelectorAll('.hero-text, .hero-gallery')).forEach(function(el) {
+  el.addEventListener('animationend', function() {
+    el.style.animation = 'none';
+  }, { once: true });
+});
 
 renderSectionTabs();
 renderCatSelect();
