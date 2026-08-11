@@ -123,9 +123,12 @@
     max-width: 380px; margin: 2px 0 4px;
   }
   @media (max-width: 480px) {
-    .brand-icon-grid { grid-template-columns: repeat(4, 1fr); max-width: 100%; gap: 10px 6px; }
-    .brand-icon-avatar { width: 50px; height: 50px; }
-    .brand-icon-label { font-size: 10.5px; }
+    /* .brand-icon-grid sits inside .chiprow (display:flex), so a flex item shrinks to its
+       content width by default — without an explicit width it never reaches the full row,
+       which is why the icons looked bunched up on the left. width:100% makes it stretch. */
+    .brand-icon-grid { grid-template-columns: repeat(4, 1fr); max-width: 100%; width: 100%; gap: 10px; }
+    .brand-icon-avatar { width: 56px; height: 56px; }
+    .brand-icon-label { font-size: 11px; }
   }
   .brand-icon-btn {
     display: flex; flex-direction: column; align-items: center; gap: 7px;
@@ -324,6 +327,28 @@
   .prod-name { font-size: 12.8px; font-weight: 600; line-height: 1.5; color: var(--gray-900); min-height: 38px; transition: color .15s; }
   .prod-brand-tag { display: inline-block; margin-right: 5px; font-size: 9.5px; font-weight: 700; color: var(--accent); background: var(--accent-soft); padding: 1px 5px; border-radius: 4px; vertical-align: middle; }
   .prod-code { margin-top: 4px; font-size: 10.5px; font-weight: 400; color: var(--gray-400); letter-spacing: .01em; }
+
+  .prod-view-toggle { margin-bottom: 4px; }
+
+  /* 리스트 보기: 썸네일은 왼쪽에 작게, 이름/코드는 오른쪽에 — 한 화면에 더 많은 제품이 들어온다 */
+  .prod-grid.view-list { display: flex; flex-direction: column; gap: 10px; }
+  .prod-grid.view-list .prod-card { display: flex; align-items: center; gap: 12px; padding: 8px; }
+  .prod-grid.view-list .prod-card:hover { transform: none; }
+  .prod-grid.view-list .prod-thumb { width: 64px; height: 64px; aspect-ratio: unset; flex: none; border-radius: 10px; }
+  .prod-grid.view-list .prod-info { padding: 0; flex: 1; min-width: 0; }
+  .prod-grid.view-list .prod-name { min-height: 0; }
+
+  /* 4열 보기: 촘촘한 그리드로 한눈에 더 많은 제품을 훑어볼 수 있게 — 좁은 화면에서는 3열로 완화 */
+  .prod-grid.view-compact { grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .prod-grid.view-compact .prod-info { padding: 8px 8px 10px; }
+  .prod-grid.view-compact .prod-name {
+    font-size: 11px; min-height: 30px; line-height: 1.4;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .prod-grid.view-compact .prod-code { display: none; }
+  @media (max-width: 420px) {
+    .prod-grid.view-compact { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  }
 
   .site-footer { background: var(--gray-100); border-top: 1px solid var(--gray-200); padding: 26px 24px 34px; margin-top: 32px; }
   .site-footer-inner { max-width: 1080px; margin: 0 auto; text-align: center; }
@@ -598,6 +623,11 @@
   </div>
 
   <div class="view" id="view-products">
+    <div class="mode-toggle prod-view-toggle" id="prodViewToggle">
+      <button class="mode-btn view-mode-btn active" type="button" data-viewmode="grid" title="그리드로 보기">▦ 그리드</button>
+      <button class="mode-btn view-mode-btn" type="button" data-viewmode="list" title="리스트로 보기">☰ 리스트</button>
+      <button class="mode-btn view-mode-btn" type="button" data-viewmode="compact" title="4열로 보기">▪ 4열</button>
+    </div>
     <div class="summary-bar" id="prodSummaryBar" style="margin-top:14px;"></div>
     <div id="prodContent"></div>
   </div>
@@ -782,6 +812,13 @@ let currentBrandFilter = '';
 let currentQuery = '';
 let currentProdCat = '';
 let currentProdBrand = '';
+let prodViewMode = 'grid'; // 'grid' | 'list' | 'compact' — remembered per-browser via localStorage
+try {
+  const savedProdViewMode = localStorage.getItem('cms_prod_view_mode');
+  if (savedProdViewMode === 'grid' || savedProdViewMode === 'list' || savedProdViewMode === 'compact') {
+    prodViewMode = savedProdViewMode;
+  }
+} catch (e) { /* localStorage unavailable (private mode etc.) — just fall back to default */ }
 let openCategories = new Set();
 let allExpanded = false;
 
@@ -868,7 +905,22 @@ const SYNONYMS = [
   ['썬크림', '선크림', '썬스크린', '선스크린', '자외선차단제'],
   ['클렌징', '세안', '폼클렌저', '클렌저'],
   ['보관', '보관법', '보관방법'],
-  ['유통기한지남', '기한지남', '유통기한임박']
+  ['유통기한지남', '기한지남', '유통기한임박'],
+  // 영어 약어를 한글 발음으로 쳐도(혹은 그 반대로도) 찾히도록 하는 매핑. q는 호출부에서 이미
+  // 소문자로 변환되어 들어오므로 여기 영어 표기는 전부 소문자로 맞춘다.
+  ['uv', '유브이', '자외선'],
+  ['uva', '유브이에이'],
+  ['uvb', '유브이비'],
+  ['spf', '에스피에프'],
+  ['pa', '피에이'],
+  ['bb', '비비'],
+  ['aha', '에이에이치에이'],
+  ['bha', '비에이치에이'],
+  ['pha', '피에이치에이'],
+  ['lha', '엘에이치에이'],
+  ['egf', '이지에프'],
+  ['pdrn', '피디알엔'],
+  ['ph', '피에이치']
 ];
 function expandQuery(q) {
   const terms = [q];
@@ -1262,6 +1314,20 @@ document.getElementById('toggleAllBtn').addEventListener('click', function() {
   renderContent();
 });
 
+Array.from(document.querySelectorAll('#prodViewToggle .view-mode-btn')).forEach(function(btn) {
+  btn.classList.toggle('active', btn.getAttribute('data-viewmode') === prodViewMode);
+  btn.addEventListener('click', function() {
+    const mode = btn.getAttribute('data-viewmode');
+    if (mode === prodViewMode) return;
+    prodViewMode = mode;
+    Array.from(document.querySelectorAll('#prodViewToggle .view-mode-btn')).forEach(function(b) {
+      b.classList.toggle('active', b === btn);
+    });
+    try { localStorage.setItem('cms_prod_view_mode', mode); } catch (e) {}
+    renderProdContent();
+  });
+});
+
 const BRAND_LABELS = { CFC: 'Cell Fusion C', SUS: '수이스킨', DMB: '더마블록', KTZ: '키즈토즈' };
 // KTZ has no storefront of its own — its line is sold through the Cell Fusion C shop — so its
 // hint reads differently from the other brands' plain "자사몰 기준" wording
@@ -1291,7 +1357,7 @@ function renderProdContent() {
     const items = (PRODUCTS[cat] || []).filter(matchBrand);
     if (!items.length) return;
     html += '<div class="prod-cat-head"><div class="cat-icon">' + iconFor(cat) + '</div><div class="cat-title-text">' + escapeHtml(cat) + '</div><div class="cat-n">' + items.length + '개</div></div>';
-    html += '<div class="prod-grid">';
+    html += '<div class="prod-grid' + (prodViewMode !== 'grid' ? ' view-' + prodViewMode : '') + '">';
     items.forEach(function(p) {
       const codeLine = p.itemCode ? '<div class="prod-code">품목코드 ' + escapeHtml(p.itemCode) + '</div>' : '';
       const brandTag = (!currentProdBrand && PRODBRANDS.length > 1) ? '<span class="prod-brand-tag">' + (p.brand || 'CFC') + '</span>' : '';
