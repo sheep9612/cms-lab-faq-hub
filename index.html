@@ -408,6 +408,15 @@
   }
 
   .quiz-submit-status { font-size: 12px; color: var(--gray-400); margin-bottom: 22px; }
+
+  .quiz-share-btn {
+    width: 100%; padding: 14px; margin-bottom: 12px; border: none; border-radius: 12px;
+    background: linear-gradient(135deg, #fee500, #fada0a); color: #391b1b; font-size: 14px; font-weight: 800;
+    cursor: pointer; font-family: inherit; transition: transform .15s, box-shadow .15s;
+  }
+  .quiz-share-btn:hover { box-shadow: 0 8px 18px rgba(254,229,0,.35); }
+  .quiz-share-btn:disabled { opacity: .6; cursor: default; }
+
   .quiz-result-actions { display: flex; gap: 10px; }
   .quiz-secondary-btn { flex: 1; padding: 15px; border: 1px solid var(--gray-200); border-radius: 12px; background: #fff; color: var(--gray-900); font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; }
   .quiz-secondary-btn:hover { border-color: var(--red); color: var(--red); }
@@ -518,6 +527,7 @@
           <div class="quiz-result-comment" id="quizResultComment"></div>
           <div class="quiz-rank-feedback" id="quizRankFeedback"></div>
           <div class="quiz-submit-status" id="quizSubmitStatus"></div>
+          <button class="quiz-share-btn" id="quizShareBtn" type="button">📸 결과 이미지로 공유하기</button>
           <div class="quiz-result-actions">
             <button class="quiz-secondary-btn" id="quizRetryBtn" type="button">다시 풀기</button>
             <button class="quiz-start-btn" id="quizShowLeaderboardBtn" type="button">순위표 보기 →</button>
@@ -550,7 +560,7 @@ const BRANDS = ["CFC", "SUS", "DMB", "KTZ"];
 const PRODCATS = ["선케어", "BB크림/베이스", "크림", "앰플/세럼", "마스크팩/패드", "클렌징", "토너", "세트", "베이비케어", "바디케어"];
 const GROUPCATS = ["선케어", "BB크림/베이스", "크림", "앰플/세럼", "마스크팩/패드", "클렌징", "토너", "세트", "베이비케어", "바디케어", "공통/전체"];
 const PRODBRANDS = ["CFC", "SUS"];
-const QUIZ_QUESTIONS = [{"brand": "CFC", "type": "ox", "question": "레이저UV썬스크린은 혼합자차 제품이다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 레이저UV썬스크린은 혼합자차 제품입니다."}, {"brand": "CFC", "type": "ox", "question": "더마릴리프썬스크린은 유기자차 제품이다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 더마릴리프썬스크린은 무기자차 제품입니다."}, {"brand": "CFC", "type": "ox", "question": "아쿠아티카쿨링썬스크린에는 일본산 원료가 함유되어 있다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 아쿠아티카쿨링썬스크린은 일본산 원료가 함유되어 있지 않습니다."}, {"brand": "CFC", "type": "ox", "question": "잡티토닝썬스크린에는 일본산 원료가 함유되어 있다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 하이드록시프로필메틸셀룰로오스, 스테아록시에터, 글루타티온 성분이 일본산으로 함유되어 있습니다."}, {"brand": "CFC", "type": "ox", "question": "썬스크린 사용 후에는 이중 세안(클렌징)을 권장한다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 썬스크린 잔여물 제거를 위해 클렌징 제품을 이용한 이중 세안을 권장드립니다."}, {"brand": "CFC", "type": "ox", "question": "시카카밍다운크림은 이중 세안이 필요하다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 시카카밍다운크림은 1차 세안으로도 충분합니다."}, {"brand": "DMB", "type": "ox", "question": "더마블록 워터프루프선크림은 실제 테스트를 거쳐 내수성 제품으로 판정받았다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 더마블록 워터프루프선크림은 워터프루프 테스트를 진행하여 내수성 제품으로 판정된 제품입니다."}, {"brand": "CFC", "type": "ox", "question": "셀퓨전씨 썬스크린 전체는 공식 워터프루프 인증을 받았다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 물/땀에 비교적 강하지만 별도의 워터프루프 인증은 없어, 야외활동 시 수시로 덧바르는 것을 권장드립니다."}, {"brand": "CFC", "type": "ox", "question": "어드밴스드 썬스크린은 논코메도제닉 테스트를 완료한 제품이다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. '어드밴스드 썬스크린'은 논코메도제닉 테스트를 완료한 제품입니다."}, {"brand": "SUS", "type": "ox", "question": "수이스킨 전제품은 논코메도제닉 테스트를 시행했다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 모공을 막을 위험이 높은 성분은 없으나, 논코메도제닉 테스트 자체는 시행하지 않았습니다."}, {"brand": "CFC", "type": "ox", "question": "멜팅클렌징폼에는 AHA 성분이 함유되어 있다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 멜팅클렌징폼에는 AHA 성분이 함유되어 있습니다."}, {"brand": "CFC", "type": "ox", "question": "멜팅클렌징폼에는 BHA 성분도 함유되어 있다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 멜팅클렌징폼에는 BHA 성분은 함유되어 있지 않습니다."}, {"brand": "CFC", "type": "ox", "question": "트리악모공톡스패드에는 PHA 성분(글루코노락톤)이 함유되어 있다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 트리악모공톡스패드에는 PHA 성분인 글루코노락톤이 함유되어 있습니다."}, {"brand": "CFC", "type": "ox", "question": "임산부는 셀퓨전씨 제품을 절대 사용할 수 없다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 저자극 제품으로 판정되었으나, 임신 중 호르몬 변화로 특이 반응이 있을 수 있어 사전 테스트나 주치의 상담을 권장드립니다."}, {"brand": "CFC", "type": "ox", "question": "영유아는 피부가 얇고 민감하여 사용 전 소량 테스트가 권장된다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 영유아 피부는 성인보다 얇고 민감할 수 있어 팔 안쪽 등 소량 테스트 후 사용을 권장드립니다."}, {"brand": "CFC", "type": "ox", "question": "시카카밍다운크림은 밤에 수면팩처럼 사용 가능하다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 진정·수분팩처럼 수면 시 사용이 가능합니다."}, {"brand": "CFC", "type": "ox", "question": "토닝C잡티세럼은 저자극이라 아침에만 사용해야 한다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 저자극 성분으로 아침·저녁 모두 사용 가능합니다."}, {"brand": "CFC", "type": "ox", "question": "셀퓨전씨 제품의 미개봉 상태 사용기한은 제조일로부터 30개월 혹은 36개월까지다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 미개봉 상태에서는 제조일로부터 30개월 혹은 36개월까지 사용 가능합니다."}, {"brand": "KTZ", "type": "ox", "question": "키즈토즈 제품의 개봉 후 사용기한은 24개월이다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 키즈토즈는 미개봉 24개월, 개봉 후에는 12개월 이내 사용을 권장드립니다."}, {"brand": "CFC", "type": "ox", "question": "포어썬클렌징폼은 pH 9.5~10.5의 강알칼리성 제품이다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 포어썬클렌징폼은 pH 9.5~10.5의 강알칼리성 제품입니다."}, {"brand": "CFC", "type": "mc", "question": "다음 중 무기자차 제품은 무엇일까요?", "options": ["더마릴리프썬스크린", "레이저UV썬스크린", "잡티토닝썬스크린", "아쿠아티카썬스프레이"], "answerIndex": 0, "explain": "더마릴리프썬스크린이 무기자차 제품입니다. 나머지는 혼합자차 또는 유기자차입니다."}, {"brand": "DMB", "type": "mc", "question": "더마블록 수분선크림의 '자차 종류' 질문에 실제로 등록된 답변은 무엇일까요? (데이터 그대로 출제)", "options": ["혼합자차입니다", "무기자차입니다", "유기자차입니다", "pH 7 제품입니다"], "answerIndex": 3, "explain": "실제 FAQ 데이터에는 'pH 7 제품입니다'로 등록되어 있어요. 자차 종류 질문에 pH로 답변된 특이 케이스입니다."}, {"brand": "CFC", "type": "mc", "question": "셀퓨전씨 클렌징 제품 중 '1차 세안만으로 썬스크린이 깨끗이 세정된다'고 안내된 제품은?", "options": ["포어 썬 클렌징 폼", "멜팅클렌징폼", "약산성패리어클렌징폼", "트리악데일리트러블케어폼클렌저"], "answerIndex": 0, "explain": "포어 썬 클렌징 폼은 모공 딥클렌징과 선크림 세정에 특화되어 1차 세안만으로도 깨끗한 세정이 가능합니다."}, {"brand": "CFC", "type": "mc", "question": "다음 중 pH가 가장 낮아(산성에 가까워) 표기된 제품은?", "options": ["토닝C비타샷앰플 (pH 3.0~5.0)", "포어썬클렌징폼 (pH 9.5~10.5)", "트리악데일리트러블케어폼클렌저 (pH 8.5~9.5)", "파하엔자임그레뉼필스파우더 (측정 불가)"], "answerIndex": 0, "explain": "토닝C비타샷앰플이 pH 3.0~5.0의 약산성으로 가장 낮습니다."}, {"brand": "KTZ", "type": "mc", "question": "미개봉 상태 사용기한이 24개월로 안내되는 브랜드는?", "options": ["셀퓨전씨", "더마블록", "키즈토즈", "수이스킨"], "answerIndex": 2, "explain": "키즈토즈는 미개봉 24개월, 개봉 후 12개월 이내 사용을 권장드립니다. (셀퓨전씨·더마블록은 30개월 또는 36개월)"}, {"brand": "DMB", "type": "mc", "question": "다음 중 공식 워터프루프(내수성) 테스트를 진행하여 판정받은 제품은?", "options": ["더마블록 워터프루프선크림", "셀퓨전씨 아쿠아티카쿨링썬스크린", "키즈토즈 더마일드썬로션", "셀퓨전씨 전 썬스크린 제품"], "answerIndex": 0, "explain": "더마블록 워터프루프선크림만 워터프루프 테스트를 진행해 내수성 제품으로 판정받았습니다."}, {"brand": "CFC", "type": "mc", "question": "트리악모공톡스패드에 함유된 PHA 성분의 정식 명칭은?", "options": ["글루코노락톤", "석시닉애씨드", "살리실릭애씨드", "히알루론산"], "answerIndex": 0, "explain": "PHA 성분인 글루코노락톤이 함유되어 있습니다."}, {"brand": "CFC", "type": "mc", "question": "포스트알파시카쿨링패드에 함유된 AHA 성분의 이름은?", "options": ["석시닉애씨드", "글루코노락톤", "락틱애씨드", "글라이콜릭애씨드"], "answerIndex": 0, "explain": "AHA 성분인 석시닉애씨드가 함유되어 있습니다."}, {"brand": "CFC", "type": "mc", "question": "다음 중 '이중 세안이 필요 없다(1차 세안으로 충분)'고 안내된 셀퓨전씨 제품은?", "options": ["시카카밍다운크림", "스킨블레미쉬밤인텐시브", "전 썬스크린 제품", "멜팅클렌징폼"], "answerIndex": 0, "explain": "시카카밍다운크림은 1차 세안으로도 충분하다고 안내되어 있습니다."}, {"brand": "KTZ", "type": "mc", "question": "키즈토즈 더마일드썬로션과 더베리뮨선쿠션의 공통 안내사항으로 옳은 것은?", "options": ["이지워시 제품이 아니라 1차 클렌징 티슈 사용 후 물 세안을 권장한다", "공식 워터프루프 인증을 받았다", "무기자차 제품이다", "개봉 후 24개월까지 사용 가능하다"], "answerIndex": 0, "explain": "두 제품 모두 이지워시 제품이 아니므로, 1차 클렌징 티슈 사용 후 물 세안을 권장드립니다."}];
+const QUIZ_QUESTIONS = [{"brand": "CFC", "type": "ox", "question": "레이저UV썬스크린은 혼합자차 제품이다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 레이저UV썬스크린은 혼합자차 제품입니다."}, {"brand": "CFC", "type": "ox", "question": "더마릴리프썬스크린은 유기자차 제품이다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 더마릴리프썬스크린은 무기자차 제품입니다."}, {"brand": "CFC", "type": "ox", "question": "아쿠아티카쿨링썬스크린에는 일본산 원료가 함유되어 있다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 아쿠아티카쿨링썬스크린은 일본산 원료가 함유되어 있지 않습니다."}, {"brand": "CFC", "type": "ox", "question": "잡티토닝썬스크린에는 일본산 원료가 함유되어 있다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 하이드록시프로필메틸셀룰로오스, 스테아록시에터, 글루타티온 성분이 일본산으로 함유되어 있습니다."}, {"brand": "CFC", "type": "ox", "question": "썬스크린 사용 후에는 이중 세안(클렌징)을 권장한다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 썬스크린 잔여물 제거를 위해 클렌징 제품을 이용한 이중 세안을 권장드립니다."}, {"brand": "CFC", "type": "ox", "question": "시카카밍다운크림은 이중 세안이 필요하다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 시카카밍다운크림은 1차 세안으로도 충분합니다."}, {"brand": "DMB", "type": "ox", "question": "더마블록 워터프루프선크림은 실제 테스트를 거쳐 내수성 제품으로 판정받았다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 더마블록 워터프루프선크림은 워터프루프 테스트를 진행하여 내수성 제품으로 판정된 제품입니다."}, {"brand": "CFC", "type": "ox", "question": "셀퓨전씨 썬스크린 전체는 공식 워터프루프 인증을 받았다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 물/땀에 비교적 강하지만 별도의 워터프루프 인증은 없어, 야외활동 시 수시로 덧바르는 것을 권장드립니다."}, {"brand": "CFC", "type": "ox", "question": "어드밴스드 썬스크린은 논코메도제닉 테스트를 완료한 제품이다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. '어드밴스드 썬스크린'은 논코메도제닉 테스트를 완료한 제품입니다."}, {"brand": "SUS", "type": "ox", "question": "수이스킨 전제품은 논코메도제닉 테스트를 시행했다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 모공을 막을 위험이 높은 성분은 없으나, 논코메도제닉 테스트 자체는 시행하지 않았습니다."}, {"brand": "CFC", "type": "ox", "question": "멜팅클렌징폼에는 AHA 성분이 함유되어 있다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 멜팅클렌징폼에는 AHA 성분이 함유되어 있습니다."}, {"brand": "CFC", "type": "ox", "question": "멜팅클렌징폼에는 BHA 성분도 함유되어 있다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 멜팅클렌징폼에는 BHA 성분은 함유되어 있지 않습니다."}, {"brand": "CFC", "type": "ox", "question": "트리악모공톡스패드에는 PHA 성분(글루코노락톤)이 함유되어 있다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 트리악모공톡스패드에는 PHA 성분인 글루코노락톤이 함유되어 있습니다."}, {"brand": "CFC", "type": "ox", "question": "임산부는 셀퓨전씨 제품을 절대 사용할 수 없다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 저자극 제품으로 판정되었으나, 임신 중 호르몬 변화로 특이 반응이 있을 수 있어 사전 테스트나 주치의 상담을 권장드립니다."}, {"brand": "CFC", "type": "ox", "question": "영유아는 피부가 얇고 민감하여 사용 전 소량 테스트가 권장된다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 영유아 피부는 성인보다 얇고 민감할 수 있어 팔 안쪽 등 소량 테스트 후 사용을 권장드립니다."}, {"brand": "CFC", "type": "ox", "question": "시카카밍다운크림은 밤에 수면팩처럼 사용 가능하다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 진정·수분팩처럼 수면 시 사용이 가능합니다."}, {"brand": "CFC", "type": "ox", "question": "토닝C잡티세럼은 저자극이라 아침에만 사용해야 한다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 저자극 성분으로 아침·저녁 모두 사용 가능합니다."}, {"brand": "CFC", "type": "ox", "question": "포어썬클렌징폼은 pH 9.5~10.5의 강알칼리성 제품이다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 포어썬클렌징폼은 pH 9.5~10.5의 강알칼리성 제품입니다."}, {"brand": "CFC", "type": "mc", "question": "다음 중 무기자차 제품은 무엇일까요?", "options": ["더마릴리프썬스크린", "레이저UV썬스크린", "잡티토닝썬스크린", "아쿠아티카썬스프레이"], "answerIndex": 0, "explain": "더마릴리프썬스크린이 무기자차 제품입니다. 나머지는 혼합자차 또는 유기자차입니다."}, {"brand": "DMB", "type": "mc", "question": "더마블록 수분선크림의 '자차 종류' 질문에 실제로 등록된 답변은 무엇일까요? (데이터 그대로 출제)", "options": ["혼합자차입니다", "무기자차입니다", "유기자차입니다", "pH 7 제품입니다"], "answerIndex": 3, "explain": "실제 FAQ 데이터에는 'pH 7 제품입니다'로 등록되어 있어요. 자차 종류 질문에 pH로 답변된 특이 케이스입니다."}, {"brand": "CFC", "type": "mc", "question": "셀퓨전씨 클렌징 제품 중 '1차 세안만으로 썬스크린이 깨끗이 세정된다'고 안내된 제품은?", "options": ["포어 썬 클렌징 폼", "멜팅클렌징폼", "약산성패리어클렌징폼", "트리악데일리트러블케어폼클렌저"], "answerIndex": 0, "explain": "포어 썬 클렌징 폼은 모공 딥클렌징과 선크림 세정에 특화되어 1차 세안만으로도 깨끗한 세정이 가능합니다."}, {"brand": "CFC", "type": "mc", "question": "다음 중 pH가 가장 낮아(산성에 가까워) 표기된 제품은?", "options": ["토닝C비타샷앰플 (pH 3.0~5.0)", "포어썬클렌징폼 (pH 9.5~10.5)", "트리악데일리트러블케어폼클렌저 (pH 8.5~9.5)", "파하엔자임그레뉼필스파우더 (측정 불가)"], "answerIndex": 0, "explain": "토닝C비타샷앰플이 pH 3.0~5.0의 약산성으로 가장 낮습니다."}, {"brand": "DMB", "type": "mc", "question": "다음 중 공식 워터프루프(내수성) 테스트를 진행하여 판정받은 제품은?", "options": ["더마블록 워터프루프선크림", "셀퓨전씨 아쿠아티카쿨링썬스크린", "키즈토즈 더마일드썬로션", "셀퓨전씨 전 썬스크린 제품"], "answerIndex": 0, "explain": "더마블록 워터프루프선크림만 워터프루프 테스트를 진행해 내수성 제품으로 판정받았습니다."}, {"brand": "CFC", "type": "mc", "question": "트리악모공톡스패드에 함유된 PHA 성분의 정식 명칭은?", "options": ["글루코노락톤", "석시닉애씨드", "살리실릭애씨드", "히알루론산"], "answerIndex": 0, "explain": "PHA 성분인 글루코노락톤이 함유되어 있습니다."}, {"brand": "CFC", "type": "mc", "question": "포스트알파시카쿨링패드에 함유된 AHA 성분의 이름은?", "options": ["석시닉애씨드", "글루코노락톤", "락틱애씨드", "글라이콜릭애씨드"], "answerIndex": 0, "explain": "AHA 성분인 석시닉애씨드가 함유되어 있습니다."}, {"brand": "CFC", "type": "mc", "question": "다음 중 '이중 세안이 필요 없다(1차 세안으로 충분)'고 안내된 셀퓨전씨 제품은?", "options": ["시카카밍다운크림", "스킨블레미쉬밤인텐시브", "전 썬스크린 제품", "멜팅클렌징폼"], "answerIndex": 0, "explain": "시카카밍다운크림은 1차 세안으로도 충분하다고 안내되어 있습니다."}, {"brand": "KTZ", "type": "mc", "question": "키즈토즈 더마일드썬로션과 더베리뮨선쿠션의 공통 안내사항으로 옳은 것은?", "options": ["이지워시 제품이 아니라 1차 클렌징 티슈 사용 후 물 세안을 권장한다", "공식 워터프루프 인증을 받았다", "무기자차 제품이다", "논코메도제닉 테스트를 완료했다"], "answerIndex": 0, "explain": "두 제품 모두 이지워시 제품이 아니므로, 1차 클렌징 티슈 사용 후 물 세안을 권장드립니다."}, {"brand": "CFC", "type": "ox", "question": "포어 썬 클렌징 폼을 사용하면 1차 세안만으로 썬스크린이 깨끗이 세정된다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 모공 딥클렌징과 선크림 세정에 특화되어 1차 세안만으로도 깨끗한 세정이 가능합니다."}, {"brand": "CFC", "type": "ox", "question": "셀퓨전씨 제품은 전성분과 제조업체 정보가 비공개다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 셀퓨전씨 전 제품은 전성분 및 제조 업체 정보가 공개되어 있습니다. (상품정보 제공고시 항목에서 확인 가능)"}, {"brand": "CFC", "type": "ox", "question": "레이저 리쥬버네이션 크림에는 EGF 성분이 함유되어 있다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. EGF 성분은 함유되어 있지 않습니다."}, {"brand": "CFC", "type": "ox", "question": "레이저 리쥬버네이션 크림에는 스테로이드 성분이 함유되어 있다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 국내 화장품법상 스테로이드 성분 사용은 금지되어 있어 함유되어 있지 않습니다."}, {"brand": "CFC", "type": "ox", "question": "레이저 리쥬버네이션 크림은 인공 향료를 첨가한 제품이다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 향료를 첨가하지 않은 무향 제품으로, 원료 고유의 향이 느껴질 수 있습니다."}, {"brand": "CFC", "type": "ox", "question": "센테카솔 연고는 트러블 자국에 사용 가능하다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 사용 가능하며, 단 민감 피부는 국소 테스트 후 사용을 권장드립니다."}, {"brand": "CFC", "type": "ox", "question": "스킨 블레미쉬 밤 인텐시브는 논코메도제닉 테스트를 완료한 제품이다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 모공을 막는 성분은 없으나, 논코메도제닉 테스트 자체는 별도로 진행되지 않았습니다."}, {"brand": "CFC", "type": "ox", "question": "스틱 썬스크린은 공식 노세범 테스트를 진행한 제품이다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 노세범 테스트 등은 별도로 시행하지 않았으나, 자체 개발 방법으로 산뜻한 사용감을 구현했습니다."}, {"brand": "CFC", "type": "ox", "question": "셀퓨전씨의 쿨링 라인은 멘톨 성분으로 쿨링감을 구현한다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 비멘톨 쿨링 성분과 수분감 있는 제형으로 피부 열을 식혀 쿨링감을 구현합니다."}, {"brand": "CFC", "type": "ox", "question": "약산성 패리어 클렌징폼의 pH는 4.25~5.25이다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 약산성 패리어 클렌징폼은 pH 4.25~5.25의 약산성 제품입니다."}, {"brand": "SUS", "type": "ox", "question": "바른약콩파우더워시만으로 선크림까지 깨끗이 지워진다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 클렌징 오일·워터·밀크 등 1차 세안제를 먼저 사용하는 것을 권장드립니다."}, {"brand": "SUS", "type": "ox", "question": "맑은아보밥비누는 세안 전용으로만 사용 가능하다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 세안뿐 아니라 샴푸, 바디워시 등 다목적으로도 이용 가능하도록 개발되었습니다."}, {"brand": "SUS", "type": "ox", "question": "어린 새싹 딥 클렌징 폼에는 AHA 및 BHA 성분이 함유되어 있다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 각질케어 성분인 LHA(카프릴로일살리실릭애씨드)가 함유되어 있으며, AHA·BHA는 포함되어 있지 않습니다."}, {"brand": "SUS", "type": "ox", "question": "어린 새싹 클린 토너에는 발효 성분이 함유되어 있다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 전성분 상 발효 성분은 함유되어 있지 않습니다."}, {"brand": "SUS", "type": "ox", "question": "어린 새싹 포어 컨트롤 패드에는 AHA·PHA·LHA 세 가지 각질케어 성분이 모두 함유되어 있다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. AHA(글라이콜릭애씨드), PHA(글루코노락톤), LHA(카프릴로일살리실릭애씨드)가 모두 함유되어 있습니다."}, {"brand": "SUS", "type": "ox", "question": "수이스킨 전 제품은 영유아·청소년 전용으로 개발되었다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 일반 성인 기준으로 개발된 일반 화장품으로, 영유아·청소년 전용 제품으로는 권장하지 않습니다."}, {"brand": "SUS", "type": "ox", "question": "착한 들국화 선크림은 논나노 처방을 받은 유기자차 제품이다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 유기자차 선크림이며, 논나노 처방을 받은 제품입니다."}, {"brand": "SUS", "type": "ox", "question": "청아한 솔잎 수분 크림에는 발효 성분이 함유되어 있다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 전성분 상 발효 성분은 함유되어 있지 않습니다."}, {"brand": "SUS", "type": "ox", "question": "화사한 유채 클렌징 밤은 오일 기반 무수(無水) 제형으로 pH 측정이 어렵다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 오일 기반의 무수 제형 특성상 pH 측정이 어려운 제품입니다."}, {"brand": "DMB", "type": "ox", "question": "마일드선스틱은 무기자차 제품이다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 마일드선스틱은 유기자차 제품입니다."}, {"brand": "DMB", "type": "ox", "question": "무기자차선크림의 pH는 6.0~8.0의 중성이다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 무기자차선크림은 pH 6.0~8.0의 중성 제품입니다."}, {"brand": "DMB", "type": "ox", "question": "바이탈선앰플은 무기자차 제품이다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 바이탈선앰플은 유기자차 제품입니다."}, {"brand": "DMB", "type": "ox", "question": "에어리썬파우더는 논코메도제닉 테스트를 완료한 제품이다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 모공을 막는 성분은 없으나 별도의 논코메도제닉 테스트는 진행되지 않았습니다."}, {"brand": "DMB", "type": "ox", "question": "PDRN해초필은 주 1회 사용하는 제품이다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 물기 없는 피부에 주 1회 도포 후 미온수로 세안합니다."}, {"brand": "KTZ", "type": "ox", "question": "키즈토즈는 3개월 이상부터 사용 가능한 온 가족 스킨케어 브랜드다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 3개월 이상부터 전 연령대가 사용할 수 있는 온 가족 안심 스킨케어 브랜드로 안내됩니다."}, {"brand": "KTZ", "type": "ox", "question": "키즈토즈는 독일 더마 테스트를 진행했다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 독일 더마 테스트를 진행하여 제품 자체의 자극을 최소화하는 데 초점을 맞췄습니다."}, {"brand": "KTZ", "type": "ox", "question": "더마일드세라바디워시는 안자극(눈 자극) 테스트를 진행했다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 눈 자극에 대한 별도의 테스트는 진행하지 않았습니다."}, {"brand": "KTZ", "type": "ox", "question": "더마일드썬로션은 무기자차(물리 자외선 차단제)이다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 징크옥사이드가 함유된 물리 자외선 차단제로, 피부 자극이 적습니다."}, {"brand": "KTZ", "type": "ox", "question": "더마일드썬로션은 공식 워터프루프 인증을 받았다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 별도의 워터프루프 인증은 없어, 물놀이·야외활동 시 수시로 덧발라주시는 것을 권장드립니다."}, {"brand": "KTZ", "type": "ox", "question": "더마일드클렌징티슈에는 식물성 계면활성제가 사용되었다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 자극을 최소화한 식물성 계면활성제 기반의 저자극 세정 제품입니다."}, {"brand": "CFC", "type": "mc", "question": "래디언스 비타 앰플의 pH 지수 범위는?", "options": ["4.7~6.7의 미산성", "2.0~3.0의 강산성", "8.0~9.0의 약알칼리성", "7.0의 중성"], "answerIndex": 0, "explain": "래디언스 비타 앰플은 pH 4.7~6.7의 미산성 제품입니다."}, {"brand": "CFC", "type": "mc", "question": "멜팅클렌징폼의 pH 지수 범위는?", "options": ["4.5~6.5의 미산성", "9.5~10.5의 강알칼리성", "2.0~3.0의 강산성", "7.0의 중성"], "answerIndex": 0, "explain": "멜팅클렌징폼은 pH 4.5~6.5의 미산성 제품입니다."}, {"brand": "CFC", "type": "mc", "question": "레이저 UV 포어 썬 세럼의 자차 종류는?", "options": ["유기자차", "무기자차", "혼합자차", "자차 성분 없음"], "answerIndex": 0, "explain": "레이저 UV 포어 썬 세럼은 유기자차 제품입니다."}, {"brand": "SUS", "type": "mc", "question": "부드러운 과실초 여성청결제의 pH 지수 범위는?", "options": ["3.5~4.5의 약산성", "9.5~10.5의 강알칼리성", "7.0의 중성", "2.0 이하의 강산성"], "answerIndex": 0, "explain": "부드러운 과실초 여성청결제는 pH 3.5~4.5의 약산성 제품입니다."}, {"brand": "DMB", "type": "mc", "question": "다음 중 더마블록의 리프 프렌들리(reef-friendly) 제품이 아닌 것은?", "options": ["워터프루프선크림", "데일리 선크림", "톤업 선크림", "무기자차 선크림"], "answerIndex": 0, "explain": "리프 프렌들리 처방 제품은 데일리 선크림, 톤업 선크림, 비비 선크림, 마일드 선스틱, 무기자차 선크림, 바이탈 선 앰플입니다. 워터프루프선크림은 해당되지 않습니다."}, {"brand": "KTZ", "type": "mc", "question": "키즈토즈는 몇 개월 이상부터 사용 가능한 브랜드로 안내되나요?", "options": ["3개월", "6개월", "12개월", "24개월"], "answerIndex": 0, "explain": "키즈토즈는 3개월 이상부터 전 연령대가 사용할 수 있는 온 가족 안심 스킨케어 브랜드로 안내됩니다."}];
 const FIREBASE_CONFIG = {"apiKey": "AIzaSyDolJtfPG7Hy1nyHk96F-j4MMGEIYK9WpQ", "authDomain": "cms-lab-faq-hub.firebaseapp.com", "projectId": "cms-lab-faq-hub", "storageBucket": "cms-lab-faq-hub.firebasestorage.app", "messagingSenderId": "112832414688", "appId": "1:112832414688:web:2100ad4d09419dbabce185"};
 
 // brand hero themes: swaps the top-left logo, hero banner gradient and product gallery
@@ -1113,13 +1123,18 @@ function quizScreenId() {
   return { start: 'quizStart', play: 'quizPlay', result: 'quizResult', leaderboard: 'quizLeaderboard' }[quizScreen];
 }
 
+const QUIZ_ROUND_SIZE = 30;
+
 function startQuiz() {
   const input = document.getElementById('quizNickInput');
   const name = input.value.trim();
   if (!name) { input.focus(); input.style.borderColor = 'var(--red)'; return; }
   quizNickname = name.slice(0, 30);
   input.style.borderColor = '';
-  quizOrder = shuffleArr(QUIZ_QUESTIONS.map(function(q, i) { return i; }));
+  // sample a fresh random subset from the full FAQ-sourced question pool every attempt,
+  // so repeat plays don't always show the exact same 30 questions
+  const allIdx = shuffleArr(QUIZ_QUESTIONS.map(function(q, i) { return i; }));
+  quizOrder = allIdx.slice(0, Math.min(QUIZ_ROUND_SIZE, allIdx.length));
   quizIdx = 0; quizScore = 0; quizAnswered = false;
   quizScreen = 'play';
   renderQuiz();
@@ -1179,6 +1194,11 @@ function selectQuizAnswer(idx) {
   const nextBtn = document.getElementById('quizNextBtn');
   nextBtn.style.display = 'inline-flex';
   nextBtn.textContent = (quizIdx + 1 < quizOrder.length) ? '다음 문제' : '결과 보기';
+  // bring the feedback + next button fully into view — on smaller/laptop screens the next
+  // button can otherwise end up sitting right at the bottom edge of the viewport
+  requestAnimationFrame(function() {
+    nextBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
 }
 
 function finishQuiz() {
@@ -1187,14 +1207,7 @@ function finishQuiz() {
   const total = quizOrder.length;
   document.getElementById('quizResultScore').textContent = quizScore + ' / ' + total;
   document.getElementById('quizResultName').textContent = quizNickname + '님의 결과';
-  const ratio = quizScore / total;
-  let comment;
-  if (ratio === 1) comment = '완벽해요! 제품 지식 마스터네요 🏆';
-  else if (ratio >= 0.8) comment = '훌륭해요! CS 에이스에 가까워요 👏';
-  else if (ratio >= 0.6) comment = '좋아요! 조금만 더 익히면 완벽해요 💪';
-  else if (ratio >= 0.4) comment = 'FAQ 페이지를 좀 더 살펴보면 좋겠어요 📖';
-  else comment = '제품 문의 FAQ 탭에서 다시 확인해보세요 🔍';
-  document.getElementById('quizResultComment').textContent = comment;
+  document.getElementById('quizResultComment').textContent = quizResultComment(quizScore, total);
   const rankEl = document.getElementById('quizRankFeedback');
   rankEl.style.display = 'none';
   rankEl.className = 'quiz-rank-feedback';
@@ -1226,7 +1239,7 @@ function submitQuizResult(name, score, total) {
       const myIndex = rows.findIndex(function(r) { return r.id === docRef.id; });
       const rank = myIndex >= 0 ? myIndex + 1 : null;
       const topScore = rows.length ? rows[0].data.score : score;
-      renderRankFeedback(rank, score, topScore, rows.length);
+      renderRankFeedback(rank, score, total, topScore, rows.length, name);
     });
   }).catch(function(err) {
     console.error(err);
@@ -1234,11 +1247,15 @@ function submitQuizResult(name, score, total) {
   });
 }
 
-function renderRankFeedback(rank, score, topScore, totalPlayers) {
+function renderRankFeedback(rank, score, total, topScore, totalPlayers, name) {
   const rankEl = document.getElementById('quizRankFeedback');
   if (!rank) { rankEl.style.display = 'none'; return; }
   rankEl.style.display = 'block';
-  if (rank === 1) {
+  if (rank === 1 && score === total) {
+    rankEl.className = 'quiz-rank-feedback quiz-rank-first';
+    rankEl.innerHTML = '<b>👑 ' + escapeHtml(name) + '님! 정말 CMS Lab 제품을 사랑하시는군요!</b><span>전 문항을 만점으로 통과하셨어요. 명예의 전당 마스터로 인정합니다 🏅</span>';
+    fireConfetti();
+  } else if (rank === 1) {
     rankEl.className = 'quiz-rank-feedback quiz-rank-first';
     rankEl.innerHTML = '<b>🎉 축하해요, 현재 1위예요!</b><span>' + totalPlayers + '명 중 최고 점수를 기록했어요. 이 자리를 지켜보세요!</span>';
     fireConfetti();
@@ -1246,7 +1263,7 @@ function renderRankFeedback(rank, score, topScore, totalPlayers) {
     const gap = Math.max(0, topScore - score);
     rankEl.className = 'quiz-rank-feedback';
     rankEl.innerHTML = '<b>현재 ' + rank + '위예요 (' + totalPlayers + '명 중)</b><span>' +
-      (gap > 0 ? '1위와 ' + gap + '점 차이예요! 조금만 더 분발해서 1위 탈환?해 보아요 🔥' : '1위와 점수는 같아요! 다시 도전해서 순위를 확정지어 보아요 🔥') +
+      (gap > 0 ? '1위와 ' + gap + '점 차이예요! 조금만 더 분발해서 1위 탈환해 보아요 🔥' : '1위와 점수는 같아요! 다시 도전해서 순위를 확정지어 보아요 🔥') +
       '</span>';
   }
 }
@@ -1270,6 +1287,108 @@ function fireConfetti() {
     container.appendChild(piece);
   }
   setTimeout(function() { container.remove(); }, 3800);
+}
+
+function roundRectPath(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+function quizResultComment(score, total) {
+  const ratio = score / total;
+  if (ratio === 1) return '완벽해요! 제품 지식 마스터네요 🏆';
+  if (ratio >= 0.8) return '훌륭해요! CS 에이스에 가까워요 👏';
+  if (ratio >= 0.6) return '좋아요! 조금만 더 익히면 완벽해요 💪';
+  if (ratio >= 0.4) return 'FAQ 페이지를 좀 더 살펴보면 좋겠어요 📖';
+  return '제품 문의 FAQ 탭에서 다시 확인해보세요 🔍';
+}
+
+async function shareQuizResultImage() {
+  const btn = document.getElementById('quizShareBtn');
+  const original = btn.textContent;
+  if (btn.disabled) return;
+  btn.disabled = true;
+  btn.textContent = '이미지 생성 중...';
+  try {
+    if (document.fonts && document.fonts.ready) { await document.fonts.ready; }
+    const total = quizOrder.length;
+    const W = 720, H = 960;
+    const canvas = document.createElement('canvas');
+    canvas.width = W; canvas.height = H;
+    const ctx = canvas.getContext('2d');
+
+    const grad = ctx.createLinearGradient(0, 0, W, H);
+    grad.addColorStop(0, '#a50d26');
+    grad.addColorStop(0.5, '#C8102E');
+    grad.addColorStop(1, '#e8384f');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '700 24px Pretendard, sans-serif';
+    ctx.fillText('CMS Lab · CS 참고 허브', W / 2, 64);
+    ctx.font = '800 38px Pretendard, sans-serif';
+    ctx.fillText('🧠 제품 지식 퀴즈 결과', W / 2, 112);
+
+    const cardX = 44, cardY = 158, cardW = W - 88, cardH = H - 158 - 44;
+    ctx.fillStyle = '#ffffff';
+    roundRectPath(ctx, cardX, cardY, cardW, cardH, 32);
+    ctx.fill();
+
+    ctx.fillStyle = '#232323';
+    ctx.font = '700 28px Pretendard, sans-serif';
+    ctx.fillText(quizNickname + '님의 결과', W / 2, cardY + 84);
+
+    ctx.fillStyle = '#C8102E';
+    ctx.font = '800 92px Pretendard, sans-serif';
+    ctx.fillText(quizScore + ' / ' + total, W / 2, cardY + 210);
+
+    ctx.fillStyle = '#4a4a4a';
+    ctx.font = '600 26px Pretendard, sans-serif';
+    ctx.fillText(quizResultComment(quizScore, total), W / 2, cardY + 270);
+
+    ctx.fillStyle = '#9b9b9b';
+    ctx.font = '500 17px Pretendard, sans-serif';
+    ctx.fillText('sheep9612.github.io/cms-lab-faq-hub', W / 2, cardY + cardH - 34);
+
+    const blob = await new Promise(function(resolve) { canvas.toBlob(resolve, 'image/png'); });
+    if (!blob) throw new Error('canvas export failed');
+    const fileName = 'cms-lab-quiz-result.png';
+    const shareText = quizNickname + '님의 CMS Lab 제품 지식 퀴즈 결과: ' + quizScore + '/' + total;
+
+    let shared = false;
+    if (navigator.share && navigator.canShare) {
+      const file = new File([blob], fileName, { type: 'image/png' });
+      if (navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({ files: [file], title: 'CMS Lab 제품 지식 퀴즈 결과', text: shareText });
+          shared = true;
+          btn.textContent = '공유 완료 ✓';
+        } catch (shareErr) {
+          if (shareErr && shareErr.name === 'AbortError') { shared = true; btn.textContent = original; }
+        }
+      }
+    }
+    if (!shared) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = fileName;
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+      btn.textContent = '이미지 저장됨! 카카오톡에서 공유해보세요 📎';
+    }
+  } catch (e) {
+    console.error(e);
+    btn.textContent = '이미지 생성에 실패했어요';
+  } finally {
+    setTimeout(function() { btn.disabled = false; btn.textContent = original; }, 2600);
+  }
 }
 
 function loadLeaderboard() {
@@ -1320,6 +1439,7 @@ document.getElementById('quizNextBtn').addEventListener('click', function() {
     finishQuiz();
   }
 });
+document.getElementById('quizShareBtn').addEventListener('click', shareQuizResultImage);
 document.getElementById('quizRetryBtn').addEventListener('click', function() {
   quizScreen = 'start';
   renderQuiz();
