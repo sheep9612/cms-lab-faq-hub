@@ -39,12 +39,13 @@
 
   /* tactile press feedback on interactive controls, à la Toss/Kakao/배민 */
   .chip, .toggle-all, .mode-btn, .jumppill, .prod-card, .quiz-opt, .quiz-start-btn,
-  .quiz-next-btn, .quiz-secondary-btn, .section-tab, .copy-btn, .back-to-top, .miss-badge {
+  .quiz-next-btn, .quiz-secondary-btn, .section-tab, .copy-btn, .back-to-top, .miss-badge, .brand-icon-btn {
     transition: transform .16s var(--ease), box-shadow .16s var(--ease), background .16s var(--ease),
       border-color .16s var(--ease), color .16s var(--ease);
   }
   .chip:active, .toggle-all:active, .mode-btn:active, .jumppill:active, .quiz-opt:active:not(.disabled),
-  .quiz-start-btn:active, .quiz-next-btn:active, .quiz-secondary-btn:active, .copy-btn:active, .back-to-top:active {
+  .quiz-start-btn:active, .quiz-next-btn:active, .quiz-secondary-btn:active, .copy-btn:active, .back-to-top:active,
+  .brand-icon-btn:active {
     transform: scale(.95);
   }
 
@@ -112,6 +113,31 @@
   }
   .mode-btn.active { background: #fff; color: var(--accent); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
   .mode-hint { font-size: 12px; color: var(--gray-400); margin: 0 0 12px 2px; }
+
+  .brand-icon-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px 14px;
+    max-width: 380px; margin: 2px 0 4px;
+  }
+  @media (max-width: 480px) {
+    .brand-icon-grid { grid-template-columns: repeat(2, 1fr); max-width: 220px; gap: 18px 28px; }
+  }
+  .brand-icon-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 7px;
+    background: none; border: none; cursor: pointer; padding: 2px; font-family: inherit;
+  }
+  .brand-icon-avatar {
+    width: 58px; height: 58px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    overflow: hidden; border: 2.5px solid var(--gray-200); box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    transition: border-color .15s, box-shadow .15s, transform .15s;
+  }
+  .brand-icon-btn:hover .brand-icon-avatar { transform: translateY(-2px); }
+  .brand-icon-btn.active .brand-icon-avatar { border-color: var(--ring, var(--accent)); box-shadow: 0 4px 14px rgba(0,0,0,.16); }
+  .brand-icon-avatar img { display: block; }
+  .brand-icon-avatar img.cover { width: 100%; height: 100%; object-fit: cover; }
+  .brand-icon-avatar img.contain { width: 76%; height: 76%; object-fit: contain; }
+  .brand-icon-avatar .mono { color: #fff; font-weight: 800; font-size: 22px; line-height: 1; }
+  .brand-icon-label { font-size: 12px; font-weight: 700; color: var(--gray-600); }
+  .brand-icon-btn.active .brand-icon-label { color: var(--accent); }
 
   .secondary-filter { margin-top: 10px; }
   .secondary-filter .catselect { min-width: 170px; }
@@ -279,6 +305,13 @@
     padding: 52px 24px 60px;
     position: relative;
     overflow: hidden;
+    max-height: 640px;
+    transition: max-height .32s var(--ease), padding .32s var(--ease), opacity .22s var(--ease);
+  }
+  /* collapsed while the quiz is active: the hero banner otherwise eats most of the
+     mobile viewport and leaves the quiz card cut off at the bottom of the screen */
+  .hero.hero-collapsed {
+    max-height: 0; padding-top: 0; padding-bottom: 0; opacity: 0; pointer-events: none;
   }
   .hero-inner {
     max-width: 1080px; margin: 0 auto; display: flex; align-items: center; gap: 36px; flex-wrap: wrap;
@@ -312,7 +345,20 @@
   }
   .hero-gallery img:hover { transform: translateY(-4px); box-shadow: 0 18px 36px rgba(0,0,0,.28); }
 
+  .hero-decor {
+    grid-column: 1 / -1; aspect-ratio: 1 / 1; border-radius: 22px;
+    background: rgba(255,255,255,.14); border: 3px solid rgba(255,255,255,.5);
+    box-shadow: 0 14px 30px rgba(0,0,0,.22); position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .hero-decor img { width: 58%; max-width: 210px; position: relative; z-index: 2; filter: drop-shadow(0 6px 14px rgba(0,0,0,.18)); }
+  .hero-decor-dot { position: absolute; border-radius: 50%; background: rgba(255,255,255,.32); }
+  .hero-decor-dot.d1 { width: 100px; height: 100px; top: -26px; left: -26px; }
+  .hero-decor-dot.d2 { width: 66px; height: 66px; bottom: 8px; right: 16px; background: rgba(255,255,255,.2); }
+  .hero-decor-dot.d3 { width: 36px; height: 36px; bottom: 36px; left: 26px; background: rgba(255,255,255,.26); }
+
   .quiz-wrap { max-width: 640px; margin: 30px auto 0; }
+  #quizPlay { scroll-margin-top: 88px; }
   .quiz-card { background: #fff; border: 1px solid var(--gray-200); border-radius: 20px; padding: 36px 32px; box-shadow: 0 10px 30px rgba(0,0,0,.04); }
   .quiz-intro { text-align: center; }
   .quiz-intro-icon {
@@ -562,6 +608,7 @@ const GROUPCATS = ["선케어", "BB크림/베이스", "크림", "앰플/세럼",
 const PRODBRANDS = ["CFC", "SUS"];
 const QUIZ_QUESTIONS = [{"brand": "CFC", "type": "ox", "question": "레이저UV썬스크린은 혼합자차 제품이다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 레이저UV썬스크린은 혼합자차 제품입니다."}, {"brand": "CFC", "type": "ox", "question": "더마릴리프썬스크린은 유기자차 제품이다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 더마릴리프썬스크린은 무기자차 제품입니다."}, {"brand": "CFC", "type": "ox", "question": "아쿠아티카쿨링썬스크린에는 일본산 원료가 함유되어 있다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 아쿠아티카쿨링썬스크린은 일본산 원료가 함유되어 있지 않습니다."}, {"brand": "CFC", "type": "ox", "question": "잡티토닝썬스크린에는 일본산 원료가 함유되어 있다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 하이드록시프로필메틸셀룰로오스, 스테아록시에터, 글루타티온 성분이 일본산으로 함유되어 있습니다."}, {"brand": "CFC", "type": "ox", "question": "썬스크린 사용 후에는 이중 세안(클렌징)을 권장한다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 썬스크린 잔여물 제거를 위해 클렌징 제품을 이용한 이중 세안을 권장드립니다."}, {"brand": "CFC", "type": "ox", "question": "시카카밍다운크림은 이중 세안이 필요하다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 시카카밍다운크림은 1차 세안으로도 충분합니다."}, {"brand": "DMB", "type": "ox", "question": "더마블록 워터프루프선크림은 실제 테스트를 거쳐 내수성 제품으로 판정받았다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 더마블록 워터프루프선크림은 워터프루프 테스트를 진행하여 내수성 제품으로 판정된 제품입니다."}, {"brand": "CFC", "type": "ox", "question": "셀퓨전씨 썬스크린 전체는 공식 워터프루프 인증을 받았다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 물/땀에 비교적 강하지만 별도의 워터프루프 인증은 없어, 야외활동 시 수시로 덧바르는 것을 권장드립니다."}, {"brand": "CFC", "type": "ox", "question": "어드밴스드 썬스크린은 논코메도제닉 테스트를 완료한 제품이다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. '어드밴스드 썬스크린'은 논코메도제닉 테스트를 완료한 제품입니다."}, {"brand": "SUS", "type": "ox", "question": "수이스킨 전제품은 논코메도제닉 테스트를 시행했다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 모공을 막을 위험이 높은 성분은 없으나, 논코메도제닉 테스트 자체는 시행하지 않았습니다."}, {"brand": "CFC", "type": "ox", "question": "멜팅클렌징폼에는 AHA 성분이 함유되어 있다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 멜팅클렌징폼에는 AHA 성분이 함유되어 있습니다."}, {"brand": "CFC", "type": "ox", "question": "멜팅클렌징폼에는 BHA 성분도 함유되어 있다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 멜팅클렌징폼에는 BHA 성분은 함유되어 있지 않습니다."}, {"brand": "CFC", "type": "ox", "question": "트리악모공톡스패드에는 PHA 성분(글루코노락톤)이 함유되어 있다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 트리악모공톡스패드에는 PHA 성분인 글루코노락톤이 함유되어 있습니다."}, {"brand": "CFC", "type": "ox", "question": "임산부는 셀퓨전씨 제품을 절대 사용할 수 없다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 저자극 제품으로 판정되었으나, 임신 중 호르몬 변화로 특이 반응이 있을 수 있어 사전 테스트나 주치의 상담을 권장드립니다."}, {"brand": "CFC", "type": "ox", "question": "영유아는 피부가 얇고 민감하여 사용 전 소량 테스트가 권장된다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 영유아 피부는 성인보다 얇고 민감할 수 있어 팔 안쪽 등 소량 테스트 후 사용을 권장드립니다."}, {"brand": "CFC", "type": "ox", "question": "시카카밍다운크림은 밤에 수면팩처럼 사용 가능하다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 진정·수분팩처럼 수면 시 사용이 가능합니다."}, {"brand": "CFC", "type": "ox", "question": "토닝C잡티세럼은 저자극이라 아침에만 사용해야 한다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 저자극 성분으로 아침·저녁 모두 사용 가능합니다."}, {"brand": "CFC", "type": "ox", "question": "포어썬클렌징폼은 pH 9.5~10.5의 강알칼리성 제품이다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 포어썬클렌징폼은 pH 9.5~10.5의 강알칼리성 제품입니다."}, {"brand": "CFC", "type": "mc", "question": "다음 중 무기자차 제품은 무엇일까요?", "options": ["더마릴리프썬스크린", "레이저UV썬스크린", "잡티토닝썬스크린", "아쿠아티카썬스프레이"], "answerIndex": 0, "explain": "더마릴리프썬스크린이 무기자차 제품입니다. 나머지는 혼합자차 또는 유기자차입니다."}, {"brand": "DMB", "type": "mc", "question": "더마블록 수분선크림의 '자차 종류' 질문에 실제로 등록된 답변은 무엇일까요? (데이터 그대로 출제)", "options": ["혼합자차입니다", "무기자차입니다", "유기자차입니다", "pH 7 제품입니다"], "answerIndex": 3, "explain": "실제 FAQ 데이터에는 'pH 7 제품입니다'로 등록되어 있어요. 자차 종류 질문에 pH로 답변된 특이 케이스입니다."}, {"brand": "CFC", "type": "mc", "question": "셀퓨전씨 클렌징 제품 중 '1차 세안만으로 썬스크린이 깨끗이 세정된다'고 안내된 제품은?", "options": ["포어 썬 클렌징 폼", "멜팅클렌징폼", "약산성패리어클렌징폼", "트리악데일리트러블케어폼클렌저"], "answerIndex": 0, "explain": "포어 썬 클렌징 폼은 모공 딥클렌징과 선크림 세정에 특화되어 1차 세안만으로도 깨끗한 세정이 가능합니다."}, {"brand": "CFC", "type": "mc", "question": "다음 중 pH가 가장 낮아(산성에 가까워) 표기된 제품은?", "options": ["토닝C비타샷앰플 (pH 3.0~5.0)", "포어썬클렌징폼 (pH 9.5~10.5)", "트리악데일리트러블케어폼클렌저 (pH 8.5~9.5)", "파하엔자임그레뉼필스파우더 (측정 불가)"], "answerIndex": 0, "explain": "토닝C비타샷앰플이 pH 3.0~5.0의 약산성으로 가장 낮습니다."}, {"brand": "DMB", "type": "mc", "question": "다음 중 공식 워터프루프(내수성) 테스트를 진행하여 판정받은 제품은?", "options": ["더마블록 워터프루프선크림", "셀퓨전씨 아쿠아티카쿨링썬스크린", "키즈토즈 더마일드썬로션", "셀퓨전씨 전 썬스크린 제품"], "answerIndex": 0, "explain": "더마블록 워터프루프선크림만 워터프루프 테스트를 진행해 내수성 제품으로 판정받았습니다."}, {"brand": "CFC", "type": "mc", "question": "트리악모공톡스패드에 함유된 PHA 성분의 정식 명칭은?", "options": ["글루코노락톤", "석시닉애씨드", "살리실릭애씨드", "히알루론산"], "answerIndex": 0, "explain": "PHA 성분인 글루코노락톤이 함유되어 있습니다."}, {"brand": "CFC", "type": "mc", "question": "포스트알파시카쿨링패드에 함유된 AHA 성분의 이름은?", "options": ["석시닉애씨드", "글루코노락톤", "락틱애씨드", "글라이콜릭애씨드"], "answerIndex": 0, "explain": "AHA 성분인 석시닉애씨드가 함유되어 있습니다."}, {"brand": "CFC", "type": "mc", "question": "다음 중 '이중 세안이 필요 없다(1차 세안으로 충분)'고 안내된 셀퓨전씨 제품은?", "options": ["시카카밍다운크림", "스킨블레미쉬밤인텐시브", "전 썬스크린 제품", "멜팅클렌징폼"], "answerIndex": 0, "explain": "시카카밍다운크림은 1차 세안으로도 충분하다고 안내되어 있습니다."}, {"brand": "KTZ", "type": "mc", "question": "키즈토즈 더마일드썬로션과 더베리뮨선쿠션의 공통 안내사항으로 옳은 것은?", "options": ["이지워시 제품이 아니라 1차 클렌징 티슈 사용 후 물 세안을 권장한다", "공식 워터프루프 인증을 받았다", "무기자차 제품이다", "논코메도제닉 테스트를 완료했다"], "answerIndex": 0, "explain": "두 제품 모두 이지워시 제품이 아니므로, 1차 클렌징 티슈 사용 후 물 세안을 권장드립니다."}, {"brand": "CFC", "type": "ox", "question": "포어 썬 클렌징 폼을 사용하면 1차 세안만으로 썬스크린이 깨끗이 세정된다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 모공 딥클렌징과 선크림 세정에 특화되어 1차 세안만으로도 깨끗한 세정이 가능합니다."}, {"brand": "CFC", "type": "ox", "question": "셀퓨전씨 제품은 전성분과 제조업체 정보가 비공개다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 셀퓨전씨 전 제품은 전성분 및 제조 업체 정보가 공개되어 있습니다. (상품정보 제공고시 항목에서 확인 가능)"}, {"brand": "CFC", "type": "ox", "question": "레이저 리쥬버네이션 크림에는 EGF 성분이 함유되어 있다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. EGF 성분은 함유되어 있지 않습니다."}, {"brand": "CFC", "type": "ox", "question": "레이저 리쥬버네이션 크림에는 스테로이드 성분이 함유되어 있다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 국내 화장품법상 스테로이드 성분 사용은 금지되어 있어 함유되어 있지 않습니다."}, {"brand": "CFC", "type": "ox", "question": "레이저 리쥬버네이션 크림은 인공 향료를 첨가한 제품이다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 향료를 첨가하지 않은 무향 제품으로, 원료 고유의 향이 느껴질 수 있습니다."}, {"brand": "CFC", "type": "ox", "question": "센테카솔 연고는 트러블 자국에 사용 가능하다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 사용 가능하며, 단 민감 피부는 국소 테스트 후 사용을 권장드립니다."}, {"brand": "CFC", "type": "ox", "question": "스킨 블레미쉬 밤 인텐시브는 논코메도제닉 테스트를 완료한 제품이다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 모공을 막는 성분은 없으나, 논코메도제닉 테스트 자체는 별도로 진행되지 않았습니다."}, {"brand": "CFC", "type": "ox", "question": "스틱 썬스크린은 공식 노세범 테스트를 진행한 제품이다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 노세범 테스트 등은 별도로 시행하지 않았으나, 자체 개발 방법으로 산뜻한 사용감을 구현했습니다."}, {"brand": "CFC", "type": "ox", "question": "셀퓨전씨의 쿨링 라인은 멘톨 성분으로 쿨링감을 구현한다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 비멘톨 쿨링 성분과 수분감 있는 제형으로 피부 열을 식혀 쿨링감을 구현합니다."}, {"brand": "CFC", "type": "ox", "question": "약산성 패리어 클렌징폼의 pH는 4.25~5.25이다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 약산성 패리어 클렌징폼은 pH 4.25~5.25의 약산성 제품입니다."}, {"brand": "SUS", "type": "ox", "question": "바른약콩파우더워시만으로 선크림까지 깨끗이 지워진다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 클렌징 오일·워터·밀크 등 1차 세안제를 먼저 사용하는 것을 권장드립니다."}, {"brand": "SUS", "type": "ox", "question": "맑은아보밥비누는 세안 전용으로만 사용 가능하다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 세안뿐 아니라 샴푸, 바디워시 등 다목적으로도 이용 가능하도록 개발되었습니다."}, {"brand": "SUS", "type": "ox", "question": "어린 새싹 딥 클렌징 폼에는 AHA 및 BHA 성분이 함유되어 있다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 각질케어 성분인 LHA(카프릴로일살리실릭애씨드)가 함유되어 있으며, AHA·BHA는 포함되어 있지 않습니다."}, {"brand": "SUS", "type": "ox", "question": "어린 새싹 클린 토너에는 발효 성분이 함유되어 있다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 전성분 상 발효 성분은 함유되어 있지 않습니다."}, {"brand": "SUS", "type": "ox", "question": "어린 새싹 포어 컨트롤 패드에는 AHA·PHA·LHA 세 가지 각질케어 성분이 모두 함유되어 있다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. AHA(글라이콜릭애씨드), PHA(글루코노락톤), LHA(카프릴로일살리실릭애씨드)가 모두 함유되어 있습니다."}, {"brand": "SUS", "type": "ox", "question": "수이스킨 전 제품은 영유아·청소년 전용으로 개발되었다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 일반 성인 기준으로 개발된 일반 화장품으로, 영유아·청소년 전용 제품으로는 권장하지 않습니다."}, {"brand": "SUS", "type": "ox", "question": "착한 들국화 선크림은 논나노 처방을 받은 유기자차 제품이다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 유기자차 선크림이며, 논나노 처방을 받은 제품입니다."}, {"brand": "SUS", "type": "ox", "question": "청아한 솔잎 수분 크림에는 발효 성분이 함유되어 있다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 전성분 상 발효 성분은 함유되어 있지 않습니다."}, {"brand": "SUS", "type": "ox", "question": "화사한 유채 클렌징 밤은 오일 기반 무수(無水) 제형으로 pH 측정이 어렵다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 오일 기반의 무수 제형 특성상 pH 측정이 어려운 제품입니다."}, {"brand": "DMB", "type": "ox", "question": "마일드선스틱은 무기자차 제품이다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 마일드선스틱은 유기자차 제품입니다."}, {"brand": "DMB", "type": "ox", "question": "무기자차선크림의 pH는 6.0~8.0의 중성이다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 무기자차선크림은 pH 6.0~8.0의 중성 제품입니다."}, {"brand": "DMB", "type": "ox", "question": "바이탈선앰플은 무기자차 제품이다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 바이탈선앰플은 유기자차 제품입니다."}, {"brand": "DMB", "type": "ox", "question": "에어리썬파우더는 논코메도제닉 테스트를 완료한 제품이다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 모공을 막는 성분은 없으나 별도의 논코메도제닉 테스트는 진행되지 않았습니다."}, {"brand": "DMB", "type": "ox", "question": "PDRN해초필은 주 1회 사용하는 제품이다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 물기 없는 피부에 주 1회 도포 후 미온수로 세안합니다."}, {"brand": "KTZ", "type": "ox", "question": "키즈토즈는 3개월 이상부터 사용 가능한 온 가족 스킨케어 브랜드다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 3개월 이상부터 전 연령대가 사용할 수 있는 온 가족 안심 스킨케어 브랜드로 안내됩니다."}, {"brand": "KTZ", "type": "ox", "question": "키즈토즈는 독일 더마 테스트를 진행했다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 독일 더마 테스트를 진행하여 제품 자체의 자극을 최소화하는 데 초점을 맞췄습니다."}, {"brand": "KTZ", "type": "ox", "question": "더마일드세라바디워시는 안자극(눈 자극) 테스트를 진행했다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 눈 자극에 대한 별도의 테스트는 진행하지 않았습니다."}, {"brand": "KTZ", "type": "ox", "question": "더마일드썬로션은 무기자차(물리 자외선 차단제)이다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 징크옥사이드가 함유된 물리 자외선 차단제로, 피부 자극이 적습니다."}, {"brand": "KTZ", "type": "ox", "question": "더마일드썬로션은 공식 워터프루프 인증을 받았다.", "options": ["O", "X"], "answerIndex": 1, "explain": "정답은 X. 별도의 워터프루프 인증은 없어, 물놀이·야외활동 시 수시로 덧발라주시는 것을 권장드립니다."}, {"brand": "KTZ", "type": "ox", "question": "더마일드클렌징티슈에는 식물성 계면활성제가 사용되었다.", "options": ["O", "X"], "answerIndex": 0, "explain": "정답은 O. 자극을 최소화한 식물성 계면활성제 기반의 저자극 세정 제품입니다."}, {"brand": "CFC", "type": "mc", "question": "래디언스 비타 앰플의 pH 지수 범위는?", "options": ["4.7~6.7의 미산성", "2.0~3.0의 강산성", "8.0~9.0의 약알칼리성", "7.0의 중성"], "answerIndex": 0, "explain": "래디언스 비타 앰플은 pH 4.7~6.7의 미산성 제품입니다."}, {"brand": "CFC", "type": "mc", "question": "멜팅클렌징폼의 pH 지수 범위는?", "options": ["4.5~6.5의 미산성", "9.5~10.5의 강알칼리성", "2.0~3.0의 강산성", "7.0의 중성"], "answerIndex": 0, "explain": "멜팅클렌징폼은 pH 4.5~6.5의 미산성 제품입니다."}, {"brand": "CFC", "type": "mc", "question": "레이저 UV 포어 썬 세럼의 자차 종류는?", "options": ["유기자차", "무기자차", "혼합자차", "자차 성분 없음"], "answerIndex": 0, "explain": "레이저 UV 포어 썬 세럼은 유기자차 제품입니다."}, {"brand": "SUS", "type": "mc", "question": "부드러운 과실초 여성청결제의 pH 지수 범위는?", "options": ["3.5~4.5의 약산성", "9.5~10.5의 강알칼리성", "7.0의 중성", "2.0 이하의 강산성"], "answerIndex": 0, "explain": "부드러운 과실초 여성청결제는 pH 3.5~4.5의 약산성 제품입니다."}, {"brand": "DMB", "type": "mc", "question": "다음 중 더마블록의 리프 프렌들리(reef-friendly) 제품이 아닌 것은?", "options": ["워터프루프선크림", "데일리 선크림", "톤업 선크림", "무기자차 선크림"], "answerIndex": 0, "explain": "리프 프렌들리 처방 제품은 데일리 선크림, 톤업 선크림, 비비 선크림, 마일드 선스틱, 무기자차 선크림, 바이탈 선 앰플입니다. 워터프루프선크림은 해당되지 않습니다."}, {"brand": "KTZ", "type": "mc", "question": "키즈토즈는 몇 개월 이상부터 사용 가능한 브랜드로 안내되나요?", "options": ["3개월", "6개월", "12개월", "24개월"], "answerIndex": 0, "explain": "키즈토즈는 3개월 이상부터 전 연령대가 사용할 수 있는 온 가족 안심 스킨케어 브랜드로 안내됩니다."}];
 const FIREBASE_CONFIG = {"apiKey": "AIzaSyDolJtfPG7Hy1nyHk96F-j4MMGEIYK9WpQ", "authDomain": "cms-lab-faq-hub.firebaseapp.com", "projectId": "cms-lab-faq-hub", "storageBucket": "cms-lab-faq-hub.firebasestorage.app", "messagingSenderId": "112832414688", "appId": "1:112832414688:web:2100ad4d09419dbabce185"};
+const KTZ_LOGO_URI = "data:image/png;base64,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";
 
 // brand hero themes: swaps the top-left logo, hero banner gradient and product gallery
 // photos depending on which brand context is currently active (FAQ 브랜드별 보기, or
@@ -582,7 +629,26 @@ const HERO_THEMES = {
     accent: '#2c3a8f',
     accentDark: '#1b2563',
     accentSoft: '#eaecf9'
+  },
+  KTZ: {
+    wordmark: '<img src="' + KTZ_LOGO_URI + '" alt="키즈토즈" loading="lazy">',
+    heroBg: 'linear-gradient(135deg, #AA5761 0%, #ED7987 50%, #f5aab2 100%)',
+    // no real KTZ product photos exist yet, so the "banner" is a decorative motif built
+    // from the logo itself (centered mark + soft translucent dots echoing its pink accent)
+    // instead of an empty/broken product grid.
+    gallery: '<div class="hero-decor"><span class="hero-decor-dot d1"></span><span class="hero-decor-dot d2"></span><span class="hero-decor-dot d3"></span><img src="' + KTZ_LOGO_URI + '" alt="키즈토즈"></div>',
+    accent: '#ED7987',
+    accentDark: '#AA5761',
+    accentSoft: '#FCEEF0'
   }
+};
+
+// small circular brand-select icon assets/colors, used by the FAQ 브랜드별 보기 icon grid
+const BRAND_ICON_META = {
+  CFC: { label: '셀퓨전씨', avatarHtml: '<img src="https://cellfusionc.co.kr/icon/logo3.png" alt="Cell Fusion C" loading="lazy" class="cover" onerror="this.style.display=\'none\'">', ring: '#C8102E', bg: '#ffffff' },
+  SUS: { label: '수이스킨', avatarHtml: '<img src="https://suiskin.cafe24.com/web/brand/suiskin_logo_2025ver.png" alt="수이스킨" loading="lazy" class="contain" onerror="this.style.display=\'none\'">', ring: '#2c3a8f', bg: '#ffffff' },
+  DMB: { label: '더마블록', avatarHtml: '<span class="mono">D</span>', ring: '#191919', bg: '#191919' },
+  KTZ: { label: '키즈토즈', avatarHtml: '<img src="' + KTZ_LOGO_URI + '" alt="키즈토즈" loading="lazy" class="contain">', ring: '#ED7987', bg: '#ffffff' }
 };
 
 function activeHeroBrand() {
@@ -738,6 +804,10 @@ function renderSectionTabs() {
   document.getElementById('view-faq').classList.toggle('active', currentView === 'faq');
   document.getElementById('view-products').classList.toggle('active', currentView === 'products');
   document.getElementById('view-quiz').classList.toggle('active', currentView === 'quiz');
+  // collapse the big hero banner while quizzing so mobile screens have enough room to
+  // show the quiz card without it being cut off at the bottom of the viewport
+  const hero = document.getElementById('heroSection');
+  if (hero) hero.classList.toggle('hero-collapsed', currentView === 'quiz');
   renderSubtabs();
 }
 
@@ -765,10 +835,13 @@ function renderSubtabs() {
 
     let chipsHtml;
     if (faqMode === 'brand') {
-      chipsHtml = BRANDS.map(function(b) {
-        const n = FAQ[b] ? FAQ[b].length : 0;
-        return '<button class="chip brandtab' + (b === currentBrand ? ' active' : '') + '" data-brand="' + b + '">' + b + '<span class="n">' + n + '</span></button>';
-      }).join('');
+      chipsHtml = '<div class="brand-icon-grid">' + BRANDS.map(function(b) {
+        const meta = BRAND_ICON_META[b] || { label: b, avatarHtml: b, ring: 'var(--accent)', bg: '#fff' };
+        return '<button class="brand-icon-btn brandtab' + (b === currentBrand ? ' active' : '') + '" data-brand="' + b + '" style="--ring:' + meta.ring + '">' +
+          '<span class="brand-icon-avatar" style="background:' + meta.bg + '">' + meta.avatarHtml + '</span>' +
+          '<span class="brand-icon-label">' + escapeHtml(meta.label) + '</span>' +
+          '</button>';
+      }).join('') + '</div>';
     } else {
       chipsHtml = GROUPCATS.map(function(g) {
         const n = FAQ_ALL.filter(function(r) { return (r.group || '기타') === g; }).length;
@@ -874,12 +947,9 @@ function renderCatSelect() {
   const sel = document.getElementById('catSelect');
   if (faqMode === 'brand') {
     const rows = FAQ[currentBrand] || [];
-    const cats = [];
-    const seen = {};
-    rows.forEach(function(r) {
-      const c = r.product || '기타';
-      if (!seen[c]) { seen[c] = true; cats.push(c); }
-    });
+    const present = new Set();
+    rows.forEach(function(r) { present.add(r.group || '기타'); });
+    const cats = GROUPCATS.filter(function(g) { return present.has(g); });
     let html = '<option value="">전체 카테고리</option>';
     cats.forEach(function(c) { html += '<option value="' + escapeHtml(c) + '">' + escapeHtml(c) + '</option>'; });
     sel.innerHTML = html;
@@ -929,7 +999,7 @@ function renderContent() {
   const q = currentQuery.trim().toLowerCase();
   const qTerms = q ? expandQuery(q) : [];
   const filtered = rows.filter(function(r) {
-    if (faqMode === 'brand' && currentCategory && r.product !== currentCategory) return false;
+    if (faqMode === 'brand' && currentCategory && (r.group || '기타') !== currentCategory) return false;
     if (faqMode === 'group' && currentBrandFilter && r.brand !== currentBrandFilter) return false;
     if (q && !textMatchesFuzzy(r.question + ' ' + r.answer + ' ' + r.product, qTerms)) return false;
     return true;
@@ -946,12 +1016,15 @@ function renderContent() {
   }
 
   const byCat = {};
-  const order = [];
+  let order = [];
   filtered.forEach(function(r) {
-    const c = r.product || '기타';
+    const c = faqMode === 'brand' ? (r.group || '기타') : (r.product || '기타');
     if (!byCat[c]) { byCat[c] = []; order.push(c); }
     byCat[c].push(r);
   });
+  if (faqMode === 'brand') {
+    order = GROUPCATS.filter(function(g) { return byCat[g]; });
+  }
 
   renderJumpNav(order);
 
@@ -984,8 +1057,9 @@ function renderContent() {
         metaHtml += '</div>';
       }
       const brandTag = faqMode === 'group' ? '<span class="item-brand-tag">' + r.brand + '</span>' : '';
+      const productTag = faqMode === 'brand' && r.product ? '<span class="item-brand-tag">' + escapeHtml(r.product) + '</span>' : '';
       html += '<div class="item">' +
-        '<div class="q"><span><span class="marker">Q.</span>' + highlightText(r.question, qTerms) + brandTag + '</span><span class="chev">▾</span></div>' +
+        '<div class="q"><span><span class="marker">Q.</span>' + highlightText(r.question, qTerms) + brandTag + productTag + '</span><span class="chev">▾</span></div>' +
         '<div class="a"><div class="a-inner"><button class="copy-btn" type="button">복사</button><div class="a-text">' + highlightText(r.answer, qTerms).replace(/\n/g, '<br>') + '</div>' + metaHtml + '</div></div>' +
         '</div>';
     });
@@ -1148,6 +1222,12 @@ function renderQuizQuestion() {
   const qi = quizOrder[quizIdx];
   const q = QUIZ_QUESTIONS[qi];
   quizAnswered = false;
+  // pin the quiz card near the top of the viewport for each new question so the hero
+  // banner above doesn't eat up screen space on mobile — keeps just the quiz visible
+  const playScreen = document.getElementById('quizPlay');
+  requestAnimationFrame(function() {
+    playScreen.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
   const pct = Math.round((quizIdx / quizOrder.length) * 100);
   document.getElementById('quizProgressFill').style.width = pct + '%';
   document.getElementById('quizProgressLabel').textContent = (quizIdx + 1) + ' / ' + quizOrder.length;
