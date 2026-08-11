@@ -12,6 +12,9 @@
     --red: #C8102E;
     --red-dark: #a50d26;
     --red-soft: #fdecef;
+    --accent: #C8102E;
+    --accent-dark: #a50d26;
+    --accent-soft: #fdecef;
     --black: #191919;
     --gray-900: #232323;
     --gray-600: #6b6b6b;
@@ -73,9 +76,9 @@
   }
   .site-inner { max-width: 1080px; margin: 0 auto; padding: 20px 24px 0; }
   .brandrow { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
-  .wordmark { font-size: 22px; font-weight: 800; color: var(--red); letter-spacing: -0.3px; }
+  .wordmark { font-size: 22px; font-weight: 800; color: var(--accent); letter-spacing: -0.3px; }
   .wordmark span { color: var(--black); font-weight: 700; font-size: 13px; margin-left: 8px; }
-  .wordmark .wordmark-logo { display: inline-flex; align-items: center; color: var(--red); font-weight: 800; font-size: 22px; margin-left: 0; letter-spacing: -0.3px; }
+  .wordmark .wordmark-logo { display: inline-flex; align-items: center; color: var(--accent); font-weight: 800; font-size: 22px; margin-left: 0; letter-spacing: -0.3px; }
   .wordmark .wordmark-logo img { display: block; height: 20px; }
 
   .section-tabs { display: flex; gap: 30px; margin-top: 16px; }
@@ -83,7 +86,7 @@
     background: none; border: none; font-size: 16px; font-weight: 700; color: var(--gray-400);
     padding: 10px 2px 15px; cursor: pointer; border-bottom: 2px solid transparent;
   }
-  .section-tab.active { color: var(--black); border-bottom-color: var(--red); }
+  .section-tab.active { color: var(--black); border-bottom-color: var(--accent); }
   .section-tab:hover:not(.active) { color: var(--gray-600); }
 
   .subtabrow {
@@ -95,7 +98,7 @@
     font-size: 13.5px; font-weight: 600; padding: 9px 16px; border-radius: 20px; cursor: pointer;
     display: inline-flex; align-items: center; gap: 6px;
   }
-  .chip.active { background: var(--red); color: #fff; border-color: var(--red); }
+  .chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
   .chip .n { color: var(--gray-400); font-weight: 600; }
   .chip.active .n { color: #ffd7dd; }
 
@@ -107,7 +110,7 @@
     border: none; background: none; font-size: 13px; font-weight: 700; color: var(--gray-600);
     padding: 8px 16px; border-radius: 7px; cursor: pointer; transition: background .12s, color .12s;
   }
-  .mode-btn.active { background: #fff; color: var(--red); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  .mode-btn.active { background: #fff; color: var(--accent); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
   .mode-hint { font-size: 12px; color: var(--gray-400); margin: 0 0 12px 2px; }
 
   .secondary-filter { margin-top: 10px; }
@@ -127,14 +130,14 @@
     flex: 0 0 auto; background: var(--gray-100); border: 1px solid transparent; color: var(--gray-600);
     font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 14px; cursor: pointer; white-space: nowrap;
   }
-  .jumppill:hover { border-color: var(--red); color: var(--red); }
+  .jumppill:hover { border-color: var(--accent); color: var(--accent); }
 
   .toolbar { display: flex; gap: 10px; margin: 12px 0 8px; flex-wrap: wrap; align-items: center; }
   .searchbox {
     flex: 1 1 300px; padding: 14px 18px; border: 1px solid var(--gray-200); border-radius: 12px;
     font-size: 14.5px; font-family: inherit; background: #fff; outline: none; transition: border-color .12s, box-shadow .12s;
   }
-  .searchbox:focus { border-color: var(--red); box-shadow: 0 0 0 3px var(--red-soft); }
+  .searchbox:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
   .catselect {
     padding: 14px 14px; border: 1px solid var(--gray-200); border-radius: 12px;
     font-size: 14px; font-family: inherit; background: #fff; min-width: 190px; color: var(--black);
@@ -144,7 +147,7 @@
     background: #fff; font-size: 13.5px; font-weight: 700; color: var(--gray-900); cursor: pointer; white-space: nowrap;
     transition: border-color .12s, color .12s;
   }
-  .toggle-all:hover { border-color: var(--red); color: var(--red); }
+  .toggle-all:hover { border-color: var(--accent); color: var(--accent); }
 
   .miss-tracker { position: relative; }
   .miss-badge {
@@ -152,7 +155,7 @@
     color: var(--gray-600); font-size: 11.5px; font-weight: 700; padding: 12px 16px; border-radius: 12px; cursor: pointer;
     white-space: nowrap;
   }
-  .miss-badge:hover { border-color: var(--red); color: var(--red); }
+  .miss-badge:hover { border-color: var(--accent); color: var(--accent); }
   .miss-panel {
     display: none; position: absolute; top: calc(100% + 8px); right: 0; z-index: 25; background: #fff;
     border: 1px solid var(--gray-200); border-radius: 14px; box-shadow: 0 16px 40px rgba(0,0,0,.14); padding: 16px; width: 290px;
@@ -166,7 +169,7 @@
   .miss-panel .empty { font-size: 12px; color: var(--gray-400); padding: 6px 0 10px; }
 
   .summary-bar { font-size: 13px; color: var(--gray-600); margin: 14px 0 22px; }
-  .summary-bar b { color: var(--red); }
+  .summary-bar b { color: var(--accent); }
 
   .category-block {
     margin-bottom: 14px;
@@ -185,21 +188,21 @@
   .category-head:hover { background: var(--gray-100); }
   .cat-icon {
     width: 38px; height: 38px; min-width: 38px; border-radius: 50%;
-    background: var(--red-soft); display: flex; align-items: center; justify-content: center;
-    color: var(--red);
+    background: var(--accent-soft); display: flex; align-items: center; justify-content: center;
+    color: var(--accent);
   }
   .cat-icon svg { width: 19px; height: 19px; }
   .cat-title-text { font-size: 15px; font-weight: 800; color: var(--black); flex: 1; }
   .cat-n { background: var(--gray-100); color: var(--gray-600); border-radius: 5px; font-size: 11.5px; padding: 3px 9px; font-weight: 700; }
   .cat-chev { color: var(--gray-400); font-size: 13px; transition: transform .25s var(--ease); margin-left: 4px; }
-  .category-block.open .cat-chev { transform: rotate(180deg); color: var(--red); }
+  .category-block.open .cat-chev { transform: rotate(180deg); color: var(--accent); }
   .category-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .32s var(--ease); }
   .category-block.open .category-body { grid-template-rows: 1fr; }
   .category-body-inner { overflow: hidden; min-height: 0; padding: 0 18px; border-top: 1px solid var(--gray-100); opacity: 0; transition: opacity .22s var(--ease), padding .32s var(--ease); }
   .category-block.open .category-body-inner { padding: 4px 18px 18px; opacity: 1; transition: opacity .3s var(--ease) .08s, padding .32s var(--ease); }
 
   .brand-badge { display: inline-block; margin-left: 8px; font-size: 10px; font-weight: 700; color: var(--gray-600); background: var(--gray-100); padding: 2px 6px; border-radius: 4px; vertical-align: middle; }
-  .item-brand-tag { display: inline-block; margin-left: 8px; font-size: 10.5px; font-weight: 700; color: var(--red); background: var(--red-soft); padding: 2px 7px; border-radius: 4px; vertical-align: middle; }
+  .item-brand-tag { display: inline-block; margin-left: 8px; font-size: 10.5px; font-weight: 700; color: var(--accent); background: var(--accent-soft); padding: 2px 7px; border-radius: 4px; vertical-align: middle; }
 
   .item { background: #fff; border: 1px solid var(--gray-200); border-radius: 12px; margin-top: 10px; overflow: hidden; transition: border-color .2s var(--ease); }
   .q {
@@ -207,9 +210,9 @@
     display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; line-height: 1.55;
   }
   .q:hover { background: var(--gray-100); }
-  .q .marker { color: var(--red); font-weight: 800; margin-right: 8px; }
+  .q .marker { color: var(--accent); font-weight: 800; margin-right: 8px; }
   .chev { color: var(--gray-400); font-size: 12px; flex-shrink: 0; margin-top: 3px; transition: transform .25s var(--ease); }
-  .item.open .chev { transform: rotate(180deg); color: var(--red); }
+  .item.open .chev { transform: rotate(180deg); color: var(--accent); }
   .a {
     display: grid; grid-template-rows: 0fr; font-size: 13.8px; line-height: 1.8; color: #3a3a3a;
     transition: grid-template-rows .3s var(--ease);
@@ -228,8 +231,8 @@
     border: 1px solid var(--gray-200); background: #fff; color: var(--gray-600);
     font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 6px; cursor: pointer;
   }
-  .copy-btn:hover { border-color: var(--red); color: var(--red); }
-  .copy-btn.copied { border-color: var(--red); color: var(--red); background: var(--red-soft); }
+  .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .copy-btn.copied { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
 
   .meta-toggle {
     margin-top: 14px; border: none; background: none; color: var(--gray-400); font-size: 11.5px; font-weight: 700;
@@ -253,13 +256,13 @@
   .prod-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 20px; }
   .prod-card { border: 1px solid var(--gray-200); border-radius: 16px; overflow: hidden; background: #fff; transition: box-shadow .15s, transform .15s; display: block; text-decoration: none; cursor: pointer; }
   .prod-card:hover { box-shadow: 0 8px 20px rgba(0,0,0,.09); transform: translateY(-3px); }
-  .prod-card:hover .prod-name { color: var(--red); }
+  .prod-card:hover .prod-name { color: var(--accent); }
   .prod-thumb { width: 100%; aspect-ratio: 1 / 1; background: var(--gray-100); display: flex; align-items: center; justify-content: center; overflow: hidden; }
   .prod-thumb img { width: 100%; height: 100%; object-fit: cover; }
   .prod-thumb .noimg { color: var(--gray-400); font-size: 11px; }
   .prod-info { padding: 12px 13px 15px; }
   .prod-name { font-size: 12.8px; font-weight: 600; line-height: 1.5; color: var(--gray-900); min-height: 38px; transition: color .15s; }
-  .prod-brand-tag { display: inline-block; margin-right: 5px; font-size: 9.5px; font-weight: 700; color: var(--red); background: var(--red-soft); padding: 1px 5px; border-radius: 4px; vertical-align: middle; }
+  .prod-brand-tag { display: inline-block; margin-right: 5px; font-size: 9.5px; font-weight: 700; color: var(--accent); background: var(--accent-soft); padding: 1px 5px; border-radius: 4px; vertical-align: middle; }
   .prod-code { margin-top: 4px; font-size: 10.5px; font-weight: 400; color: var(--gray-400); letter-spacing: .01em; }
 
   .back-to-top {
@@ -268,7 +271,7 @@
     box-shadow: 0 4px 14px rgba(0,0,0,.22); display: none; align-items: center; justify-content: center;
     z-index: 40; transition: background .15s;
   }
-  .back-to-top:hover { background: var(--red); }
+  .back-to-top:hover { background: var(--accent); }
   .back-to-top.show { display: flex; }
 
   .hero {
@@ -312,6 +315,19 @@
   .quiz-wrap { max-width: 640px; margin: 30px auto 0; }
   .quiz-card { background: #fff; border: 1px solid var(--gray-200); border-radius: 20px; padding: 36px 32px; box-shadow: 0 10px 30px rgba(0,0,0,.04); }
   .quiz-intro { text-align: center; }
+  .quiz-intro-icon {
+    width: 78px; height: 78px; margin: 0 auto 18px; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, var(--red-soft), #fff7f8); border-radius: 26px; font-size: 38px;
+    box-shadow: 0 12px 28px rgba(200,16,46,.12);
+    animation: quizIntroFloat 2.6s ease-in-out infinite;
+    transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+    cursor: default;
+  }
+  .quiz-intro-icon:hover { transform: scale(1.14) rotate(-8deg); box-shadow: 0 16px 34px rgba(200,16,46,.18); animation-play-state: paused; }
+  @keyframes quizIntroFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-9px) rotate(4deg); }
+  }
   .quiz-intro-badge { display: inline-block; background: var(--red-soft); color: var(--red); font-size: 12.5px; font-weight: 700; padding: 7px 14px; border-radius: 20px; margin-bottom: 18px; }
   .quiz-intro-title { font-size: 22px; font-weight: 800; margin: 0 0 10px; letter-spacing: -0.3px; }
   .quiz-intro-sub { font-size: 13.5px; color: var(--gray-600); line-height: 1.7; margin: 0 0 26px; }
@@ -334,10 +350,26 @@
   .quiz-options-ox { flex-direction: row; gap: 14px; }
   .quiz-opt { padding: 16px; border: 1.5px solid var(--gray-200); border-radius: 12px; background: #fff; font-size: 14px; font-weight: 600; text-align: left; cursor: pointer; transition: border-color .12s, background .12s; font-family: inherit; }
   .quiz-opt:hover:not(.disabled) { border-color: var(--red); background: var(--red-soft); }
-  .quiz-opt-ox { flex: 1; text-align: center; font-size: 22px; font-weight: 800; padding: 24px; }
   .quiz-opt.disabled { cursor: default; }
   .quiz-opt.correct { border-color: #1a9e5c; background: #eafaf1; color: #1a9e5c; }
   .quiz-opt.wrong { border-color: var(--red); background: var(--red-soft); color: var(--red); }
+
+  /* Toss-style square O/X cards */
+  .quiz-opt-ox {
+    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+    aspect-ratio: 1 / 1; padding: 18px; border-radius: 22px; border: none; text-align: center;
+    transition: background .15s, transform .15s, box-shadow .15s;
+  }
+  .quiz-opt-ox:hover:not(.disabled) { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(0,0,0,.08); }
+  .quiz-opt-ox-icon { width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; }
+  .quiz-opt-ox-icon svg { width: 100%; height: 100%; }
+  .quiz-opt-ox-label { font-size: 15.5px; font-weight: 800; }
+  .quiz-opt-o { background: #eaf2ff; color: #2361d8; }
+  .quiz-opt-o:hover:not(.disabled) { background: #dcebff; }
+  .quiz-opt-x { background: #ffecec; color: #e13a3a; }
+  .quiz-opt-x:hover:not(.disabled) { background: #ffdede; }
+  .quiz-opt-ox.correct { background: #eafaf1 !important; color: #1a9e5c !important; box-shadow: 0 0 0 3px #1a9e5c inset; }
+  .quiz-opt-ox.wrong { background: var(--red-soft) !important; color: var(--red) !important; box-shadow: 0 0 0 3px var(--red) inset; }
 
   .quiz-feedback { margin-top: 20px; padding: 16px 18px; border-radius: 12px; font-size: 13px; line-height: 1.7; }
   .quiz-feedback.ok { background: #eafaf1; color: #157a46; }
@@ -353,6 +385,28 @@
   .quiz-result-name { font-size: 14px; font-weight: 700; color: var(--gray-600); margin-bottom: 6px; }
   .quiz-result-score { font-size: 42px; font-weight: 800; color: var(--red); margin-bottom: 10px; letter-spacing: -1px; }
   .quiz-result-comment { font-size: 14.5px; font-weight: 600; margin-bottom: 18px; }
+
+  .quiz-rank-feedback {
+    display: none; text-align: left; margin: 0 0 18px; padding: 16px 18px; border-radius: 14px;
+    background: var(--gray-100); animation: rankPop .4s var(--ease) both;
+  }
+  .quiz-rank-feedback b { display: block; font-size: 14.5px; margin-bottom: 4px; color: var(--gray-900); }
+  .quiz-rank-feedback span { font-size: 12.5px; color: var(--gray-600); line-height: 1.6; }
+  .quiz-rank-feedback.quiz-rank-first { background: linear-gradient(135deg, #fff6d9, #ffe9a8); }
+  .quiz-rank-feedback.quiz-rank-first b { color: #9a6b00; }
+  .quiz-rank-feedback.quiz-rank-first span { color: #8a6200; }
+  @keyframes rankPop { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+  .confetti-container { position: fixed; inset: 0; pointer-events: none; z-index: 999; overflow: hidden; }
+  .confetti-piece {
+    position: absolute; top: -20px; width: 9px; height: 14px; opacity: .95;
+    animation-name: confettiFall; animation-timing-function: cubic-bezier(.36,.02,.66,.9); animation-fill-mode: forwards;
+  }
+  @keyframes confettiFall {
+    0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+    100% { transform: translate(var(--drift), 105vh) rotate(var(--rot)); opacity: .85; }
+  }
+
   .quiz-submit-status { font-size: 12px; color: var(--gray-400); margin-bottom: 22px; }
   .quiz-result-actions { display: flex; gap: 10px; }
   .quiz-secondary-btn { flex: 1; padding: 15px; border: 1px solid var(--gray-200); border-radius: 12px; background: #fff; color: var(--gray-900); font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; }
@@ -432,7 +486,8 @@
 
       <div class="quiz-screen" id="quizStart">
         <div class="quiz-card quiz-intro">
-          <div class="quiz-intro-badge">🧠 CMS Lab 제품 지식 퀴즈</div>
+          <div class="quiz-intro-icon" id="quizIntroIcon"><span>🧠</span></div>
+          <div class="quiz-intro-badge">CMS Lab 제품 지식 퀴즈</div>
           <h2 class="quiz-intro-title">우리 제품, 얼마나 알고 계세요?</h2>
           <p class="quiz-intro-sub">실제 FAQ 데이터를 기반으로 만든 30문항 O/X·객관식 퀴즈예요.<br>닉네임을 입력하고 도전해보세요!</p>
           <input type="text" id="quizNickInput" class="quiz-nick-input" placeholder="닉네임 또는 이름을 입력하세요 (최대 30자)" maxlength="30">
@@ -461,6 +516,7 @@
           <div class="quiz-result-name" id="quizResultName"></div>
           <div class="quiz-result-score" id="quizResultScore"></div>
           <div class="quiz-result-comment" id="quizResultComment"></div>
+          <div class="quiz-rank-feedback" id="quizRankFeedback"></div>
           <div class="quiz-submit-status" id="quizSubmitStatus"></div>
           <div class="quiz-result-actions">
             <button class="quiz-secondary-btn" id="quizRetryBtn" type="button">다시 풀기</button>
@@ -504,12 +560,18 @@ const HERO_THEMES = {
   CFC: {
     wordmark: 'Cell Fusion C',
     heroBg: 'linear-gradient(135deg, #a50d26 0%, #C8102E 50%, #e8384f 100%)',
-    gallery: "<img class=\"g1\" src=\"https://cellfusionc.co.kr/web/product/big/202604/1d9c4cf49a7edd264d4e6ebb966fa692.jpg\" alt=\"레이저 UV 썬스크린\" loading=\"lazy\" onerror=\"this.style.display='none'\"><img class=\"g2\" src=\"https://cellfusionc.co.kr/web/product/big/202504/fc7e31eecb86dc86d9172945f4775986.jpg\" alt=\"쿨링 젤 크림\" loading=\"lazy\" onerror=\"this.style.display='none'\"><img class=\"g3\" src=\"https://cellfusionc.co.kr/web/product/big/202503/0a74b743dd39cd71db432dd234d77aac.jpg\" alt=\"토닝 C 잡티 세럼\" loading=\"lazy\" onerror=\"this.style.display='none'\"><img class=\"g4\" src=\"https://cellfusionc.co.kr/web/product/big/202505/2b90cbab59c23342d26b4b41166bff4c.jpg\" alt=\"퍼스트 쿨링 마스크\" loading=\"lazy\" onerror=\"this.style.display='none'\"><img class=\"g5\" src=\"https://cellfusionc.co.kr/web/product/big/shop1_a2bfb7b6d96460ddfaa2437bf3f24279.jpg\" alt=\"약산성 패리어 토너\" loading=\"lazy\" onerror=\"this.style.display='none'\"><img class=\"g6\" src=\"https://cellfusionc.co.kr/web/product/big/202512/e0c06ae1638a585d4be42d4e36ec830d.jpg\" alt=\"더 마일드 클렌징 티슈\" loading=\"lazy\" onerror=\"this.style.display='none'\">"
+    gallery: "<img class=\"g1\" src=\"https://cellfusionc.co.kr/web/product/big/202604/1d9c4cf49a7edd264d4e6ebb966fa692.jpg\" alt=\"레이저 UV 썬스크린\" loading=\"lazy\" onerror=\"this.style.display='none'\"><img class=\"g2\" src=\"https://cellfusionc.co.kr/web/product/big/202504/fc7e31eecb86dc86d9172945f4775986.jpg\" alt=\"쿨링 젤 크림\" loading=\"lazy\" onerror=\"this.style.display='none'\"><img class=\"g3\" src=\"https://cellfusionc.co.kr/web/product/big/202503/0a74b743dd39cd71db432dd234d77aac.jpg\" alt=\"토닝 C 잡티 세럼\" loading=\"lazy\" onerror=\"this.style.display='none'\"><img class=\"g4\" src=\"https://cellfusionc.co.kr/web/product/big/202505/2b90cbab59c23342d26b4b41166bff4c.jpg\" alt=\"퍼스트 쿨링 마스크\" loading=\"lazy\" onerror=\"this.style.display='none'\"><img class=\"g5\" src=\"https://cellfusionc.co.kr/web/product/big/shop1_a2bfb7b6d96460ddfaa2437bf3f24279.jpg\" alt=\"약산성 패리어 토너\" loading=\"lazy\" onerror=\"this.style.display='none'\"><img class=\"g6\" src=\"https://cellfusionc.co.kr/web/product/big/202512/e0c06ae1638a585d4be42d4e36ec830d.jpg\" alt=\"더 마일드 클렌징 티슈\" loading=\"lazy\" onerror=\"this.style.display='none'\">",
+    accent: '#C8102E',
+    accentDark: '#a50d26',
+    accentSoft: '#fdecef'
   },
   SUS: {
     wordmark: '<img src="https://suiskin.cafe24.com/web/brand/suiskin_logo_2025ver.png" alt="수이스킨" loading="lazy">',
     heroBg: 'linear-gradient(135deg, #1b2563 0%, #2c3a8f 50%, #5c6bc9 100%)',
-    gallery: "<img class=\"g1\" src=\"https://suiskin.co.kr/web/product/medium/202509/f337084031c3c2014af46295a62959c2.png\" alt=\"어린 새싹 딥 클렌징 폼\" loading=\"lazy\" onerror=\"this.style.display='none'\"><img class=\"g2\" src=\"https://suiskin.co.kr/web/product/medium/202509/27a03a58d9422eebb730b672bc750e5b.jpg\" alt=\"어린 새싹 포어 타이트닝 세럼\" loading=\"lazy\" onerror=\"this.style.display='none'\"><img class=\"g3\" src=\"https://suiskin.co.kr/web/product/medium/202509/1b3e042dc6f5efc4fde6e1e3498ef8cf.png\" alt=\"청아한 솔잎 수분 크림\" loading=\"lazy\" onerror=\"this.style.display='none'\"><img class=\"g4\" src=\"https://suiskin.co.kr/web/product/medium/202509/bceb5f66ac017b1b58902e7c80723e67.png\" alt=\"어린 새싹 포어 컨트롤 패드\" loading=\"lazy\" onerror=\"this.style.display='none'\"><img class=\"g5\" src=\"https://suiskin.co.kr/web/product/medium/202509/3c591f05fbd613a6255dc674b9bae6cc.png\" alt=\"속수분케어 하얀 자작나무 수액 앰플\" loading=\"lazy\" onerror=\"this.style.display='none'\"><img class=\"g6\" src=\"https://suiskin.co.kr/web/product/medium/202509/a4d10d79b061c031c3f7a9f3ab97bcd0.png\" alt=\"어린 새싹 클린 토너\" loading=\"lazy\" onerror=\"this.style.display='none'\">"
+    gallery: "<img class=\"g1\" src=\"https://suiskin.co.kr/web/product/medium/202509/f337084031c3c2014af46295a62959c2.png\" alt=\"어린 새싹 딥 클렌징 폼\" loading=\"lazy\" onerror=\"this.style.display='none'\"><img class=\"g2\" src=\"https://suiskin.co.kr/web/product/medium/202509/27a03a58d9422eebb730b672bc750e5b.jpg\" alt=\"어린 새싹 포어 타이트닝 세럼\" loading=\"lazy\" onerror=\"this.style.display='none'\"><img class=\"g3\" src=\"https://suiskin.co.kr/web/product/medium/202509/1b3e042dc6f5efc4fde6e1e3498ef8cf.png\" alt=\"청아한 솔잎 수분 크림\" loading=\"lazy\" onerror=\"this.style.display='none'\"><img class=\"g4\" src=\"https://suiskin.co.kr/web/product/medium/202509/bceb5f66ac017b1b58902e7c80723e67.png\" alt=\"어린 새싹 포어 컨트롤 패드\" loading=\"lazy\" onerror=\"this.style.display='none'\"><img class=\"g5\" src=\"https://suiskin.co.kr/web/product/medium/202509/3c591f05fbd613a6255dc674b9bae6cc.png\" alt=\"속수분케어 하얀 자작나무 수액 앰플\" loading=\"lazy\" onerror=\"this.style.display='none'\"><img class=\"g6\" src=\"https://suiskin.co.kr/web/product/medium/202509/a4d10d79b061c031c3f7a9f3ab97bcd0.png\" alt=\"어린 새싹 클린 토너\" loading=\"lazy\" onerror=\"this.style.display='none'\">",
+    accent: '#2c3a8f',
+    accentDark: '#1b2563',
+    accentSoft: '#eaecf9'
   }
 };
 
@@ -527,6 +589,10 @@ function updateHeaderTheme() {
   if (wm) wm.innerHTML = theme.wordmark;
   if (hero) hero.style.background = theme.heroBg;
   if (gallery) gallery.innerHTML = theme.gallery;
+  const root = document.documentElement.style;
+  root.setProperty('--accent', theme.accent);
+  root.setProperty('--accent-dark', theme.accentDark);
+  root.setProperty('--accent-soft', theme.accentSoft);
 }
 
 let currentView = 'faq';
@@ -1060,6 +1126,9 @@ function startQuiz() {
   renderQuizQuestion();
 }
 
+const QUIZ_OX_ICON_O = '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="3"/></svg>';
+const QUIZ_OX_ICON_X = '<svg viewBox="0 0 24 24" fill="none"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>';
+
 function renderQuizQuestion() {
   const qi = quizOrder[quizIdx];
   const q = QUIZ_QUESTIONS[qi];
@@ -1075,8 +1144,15 @@ function renderQuizQuestion() {
   q.options.forEach(function(opt, idx) {
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'quiz-opt' + (q.type === 'ox' ? ' quiz-opt-ox' : '');
-    btn.textContent = opt;
+    if (q.type === 'ox') {
+      const isO = idx === 0;
+      btn.className = 'quiz-opt quiz-opt-ox ' + (isO ? 'quiz-opt-o' : 'quiz-opt-x');
+      btn.innerHTML = '<span class="quiz-opt-ox-icon">' + (isO ? QUIZ_OX_ICON_O : QUIZ_OX_ICON_X) + '</span>' +
+        '<span class="quiz-opt-ox-label">' + (isO ? '그렇다' : '아니다') + '</span>';
+    } else {
+      btn.className = 'quiz-opt';
+      btn.textContent = opt;
+    }
     btn.addEventListener('click', function() { selectQuizAnswer(idx); });
     optWrap.appendChild(btn);
   });
@@ -1119,6 +1195,10 @@ function finishQuiz() {
   else if (ratio >= 0.4) comment = 'FAQ 페이지를 좀 더 살펴보면 좋겠어요 📖';
   else comment = '제품 문의 FAQ 탭에서 다시 확인해보세요 🔍';
   document.getElementById('quizResultComment').textContent = comment;
+  const rankEl = document.getElementById('quizRankFeedback');
+  rankEl.style.display = 'none';
+  rankEl.className = 'quiz-rank-feedback';
+  rankEl.innerHTML = '';
   submitQuizResult(quizNickname, quizScore, total);
 }
 
@@ -1132,12 +1212,64 @@ function submitQuizResult(name, score, total) {
     score: score,
     total: total,
     ts: firebase.firestore.FieldValue.serverTimestamp()
-  }).then(function() {
+  }).then(function(docRef) {
     statusEl.textContent = '순위표에 기록되었어요 ✓';
+    return db.collection('quizResults').get().then(function(snap) {
+      const rows = [];
+      snap.forEach(function(doc) { rows.push({ id: doc.id, data: doc.data() }); });
+      rows.sort(function(a, b) {
+        if (b.data.score !== a.data.score) return b.data.score - a.data.score;
+        const at = a.data.ts && a.data.ts.toMillis ? a.data.ts.toMillis() : Infinity;
+        const bt = b.data.ts && b.data.ts.toMillis ? b.data.ts.toMillis() : Infinity;
+        return at - bt;
+      });
+      const myIndex = rows.findIndex(function(r) { return r.id === docRef.id; });
+      const rank = myIndex >= 0 ? myIndex + 1 : null;
+      const topScore = rows.length ? rows[0].data.score : score;
+      renderRankFeedback(rank, score, topScore, rows.length);
+    });
   }).catch(function(err) {
     console.error(err);
     statusEl.textContent = '기록에 실패했어요. 잠시 후 다시 시도해주세요.';
   });
+}
+
+function renderRankFeedback(rank, score, topScore, totalPlayers) {
+  const rankEl = document.getElementById('quizRankFeedback');
+  if (!rank) { rankEl.style.display = 'none'; return; }
+  rankEl.style.display = 'block';
+  if (rank === 1) {
+    rankEl.className = 'quiz-rank-feedback quiz-rank-first';
+    rankEl.innerHTML = '<b>🎉 축하해요, 현재 1위예요!</b><span>' + totalPlayers + '명 중 최고 점수를 기록했어요. 이 자리를 지켜보세요!</span>';
+    fireConfetti();
+  } else {
+    const gap = Math.max(0, topScore - score);
+    rankEl.className = 'quiz-rank-feedback';
+    rankEl.innerHTML = '<b>현재 ' + rank + '위예요 (' + totalPlayers + '명 중)</b><span>' +
+      (gap > 0 ? '1위와 ' + gap + '점 차이예요! 조금만 더 분발해서 1위 탈환?해 보아요 🔥' : '1위와 점수는 같아요! 다시 도전해서 순위를 확정지어 보아요 🔥') +
+      '</span>';
+  }
+}
+
+function fireConfetti() {
+  const colors = ['#C8102E', '#2c3a8f', '#f5b400', '#1a9e5c', '#8e44ad', '#ff6b81'];
+  const container = document.createElement('div');
+  container.className = 'confetti-container';
+  document.body.appendChild(container);
+  const count = 90;
+  for (let i = 0; i < count; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = (Math.random() * 100) + 'vw';
+    piece.style.background = colors[i % colors.length];
+    piece.style.animationDelay = (Math.random() * 0.4) + 's';
+    piece.style.animationDuration = (2.2 + Math.random() * 1.4) + 's';
+    piece.style.setProperty('--drift', (Math.random() * 120 - 60) + 'px');
+    piece.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
+    if (Math.random() < 0.5) piece.style.borderRadius = '50%';
+    container.appendChild(piece);
+  }
+  setTimeout(function() { container.remove(); }, 3800);
 }
 
 function loadLeaderboard() {
